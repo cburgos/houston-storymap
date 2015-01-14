@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap 101 Template</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Bootstrap -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -35,7 +35,7 @@
         var dojoConfig = {
             packages: [{
                 name: "application",
-                location: package_path + '/js'
+                location: package_path + '/js/app'
             }, {
                 name: "bootstrap",
                 location: "//rawgit.com/xsokev/Dojo-Bootstrap/master"
@@ -44,14 +44,10 @@
     </script>
     <script src="http://js.arcgis.com/3.12compact"></script>
     <script>
-        require(["esri/map", "application/bootstrapmap", "dojo/domReady!"],
-          function (Map, BootstrapMap) {
-              // Get a reference to the ArcGIS Map class
-              var map = BootstrapMap.create("mapDiv", {
-                  basemap: "national-geographic",
-                  center: [-122.45, 37.77],
-                  zoom: 12
-              });
+        require(["application/Controller", "dojo/domReady!"],
+          function (App) {
+              var app = new App();
+              app.startup();
           });
     </script>
 
