@@ -77,14 +77,17 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 array.forEach(this.activeLayer.graphics, lang.hitch(this, function (graphic) {
                     //Create thumbnails
                     var col = domConstruct.create("div", {
-                        "class": "col-xs-12 col-md-4"
+                        "class": "col-xs-12 col-md-4 thumbnail"
                     }, row, "last");
                     var aTag = domConstruct.create("a", {
-                        "class": "thumbnail"
                     }, col, "last");
                     var img = domConstruct.create("img", {
-                        alt: graphic.attributes[config.shortlistDisplayField]
+                        alt: graphic.attributes[config.shortlistDisplayField],
+                        src: graphic.attributes[config.imageField]
                     }, aTag, "last");
+                    var label = domConstruct.create("label", {
+                        innerHTML : graphic.attributes[config.shortlistDisplayField]
+                    }, img, "after");
                     //Col click
                     on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));
                 }));
