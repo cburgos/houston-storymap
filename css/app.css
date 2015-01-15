@@ -1,0 +1,101 @@
+﻿.page-header {
+    background-color:#2B7DA2;
+    margin-top:0;
+    margin-bottom:0;
+}
+#mapDiv {
+    height:100%;
+	width:100%;
+}
+.container {
+    width:100%;
+}
+.logo {
+    display:table-cell;
+    width:100px;
+}
+.social {
+    display:table-cell;
+}
+#headerText {
+    display: table-cell;
+    color:white;
+}
+.links {
+    display:table-cell;
+    padding-left:100%;
+}
+#msLink {
+    color: #C5D5D5;
+    font-family: "open_sansregular",sans-serif;
+    font-weight: normal !important;
+    font-size: 13px;
+    outline: medium none;
+    text-decoration: none;
+}
+.thumbnail {
+    margin-bottom:0px;
+    text-align:center;
+}
+.thumbnail img {
+    max-width: 80px;
+    max-height: 80px;
+    margin: 10px;
+}
+.thumbContainer {
+    max-height:700px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+.basemapBG {
+    height:60px;
+}
+.basemapToggle{
+	position: relative;
+	left: 20px;
+	top: 155px;
+    width:60px;
+    height:85px;
+	text-align: center;
+	border: 1px solid #57585A;
+	background-color: #FFF;
+	color: #4C4C4C;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	z-index:5;
+}
+.homeButton {
+    position: relative;
+	left: 15px;
+    z-index:5;
+    width:32px;
+    height:32px;
+    background-color:white;
+    border:1px solid #CCC;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+    text-align:center;
+}
+.locateButton {
+    position: relative;
+	left: 15px;
+    z-index:5;
+    width:32px;
+    height:32px;
+    background-color:white;
+    border:1px solid #CCC;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+    text-align:center;
+}

@@ -9,12 +9,8 @@
     <!-- Step 1. Add CSS for the mapping components -->
     <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.12/esri/css/esri.css">
     <link rel="stylesheet" type="text/css" href="http://esri.github.io/bootstrap-map-js/src/css/bootstrapmap.css">
-    <style type="text/css">
-        #mapDiv {
-            min-height: 100px;
-            max-height: 1000px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+
 
     <!-- HTML5 IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -23,16 +19,40 @@
     <![endif]-->
 </head>
 <body>
-
+    <div class="container">
+        <div class="page-header">
+            <div class="logo">
+                <img src="images/cityseal_trans_white_inside.png" alt="City of Houston" style="width:80px;height:87px;">
+            </div>
+            <div id="headerText">
+                <h1 id="title">Draft 5-Year CIP (2015 - 2020)</h1>
+                <small id="subtitle">Public Works and Engineering</small>
+            </div>
+            <div class="links">
+                <div class="social">
+                    <a id="msLink" href="http://www.rebuildhouston.org/" target="_blank">Rebuild Houston</a>
+                </div>
+                <div class="logo">
+                    <img id="logoImg" src="images/PWE_transparent70x49.png" style="width:60px;height:60px;" alt="Public Works">
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Step 2. Add HTML to define the layout of the page and the map -->
     <div class="container">
-        <div id="mapDiv"></div>
+        <div class="col-xs-4">
+            <div id="shortlist"></div>
+        </div>
+        <div  id="mapDiv">
+            <div id="basemapToggle"></div>
+        </div>
     </div>
 
     <!-- Step 3. Add JS to load the responsive map -->
     <script>
         var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
         var dojoConfig = {
+            parseOnLoad: true,
             packages: [{
                 name: "application",
                 location: package_path + '/js/app'
