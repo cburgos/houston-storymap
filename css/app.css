@@ -9,6 +9,8 @@
 }
 .container {
     width:100%;
+    padding-left:0px;
+    padding-right:0px;
 }
 .logo {
     display:table-cell;
