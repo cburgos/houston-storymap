@@ -11,9 +11,14 @@
     "application/widgets/Shortlist",
     "application/config",
     "esri/dijit/BasemapToggle",
+    "esri/geometry/Point",
+    "esri/geometry/webMercatorUtils",
+    "esri/graphic",
+    "esri/layers/GraphicsLayer",
+    "esri/symbols/PictureMarkerSymbol",
     "bootstrap/Modal"
 ],
-function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Modal) {
+function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
     return declare(null, {
         startup: function () {
             this.init();
@@ -58,8 +63,28 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
                         src: "images/locateButton.png"
                     }, locateBtn, "last");
 
+                    var locateLayer = new GraphicsLayer({
+                        id: "locateLayer"
+                    });
+                    this.map.addLayer(locateLayer);
+
+                    var locateSymbol = new PictureMarkerSymbol('images/mapcommand-location-marker.png', 21, 21);
+
                     on(locateBtn, "click", lang.hitch(this, function (event) {
-                        //this.map.setExtent(homeExtent);
+                        navigator.geolocation.getCurrentPosition(lang.hitch(this, function (e) {
+                            var pt = new Point(e.coords.longitude, e.coords.latitude);
+                            var locationPoint = webMercatorUtils.geographicToWebMercator(pt);
+
+                            this.map.centerAt(locationPoint);
+
+		                    locateLayer.clear();
+		                    locateLayer.add(new Graphic(locationPoint, locateSymbol));
+
+		                    setTimeout(function () {
+                                //TODO: Is this needed?
+		                        query('#locateLayer_layer image').hide();
+		                    }, 10000);
+                        }));
                     }));
 
                     //Basemap Toggle
