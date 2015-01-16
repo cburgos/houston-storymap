@@ -14,10 +14,10 @@
 }
 .logo {
     display:table-cell;
-    width:100px;
 }
 .social {
     display:table-cell;
+    vertical-align: bottom;
 }
 #headerText {
     display: table-cell;
@@ -25,7 +25,6 @@
 }
 .links {
     display:table-cell;
-    padding-left:100%;
 }
 #msLink {
     color: #C5D5D5;
