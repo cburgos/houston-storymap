@@ -5,18 +5,23 @@
     "dojo/dom-construct",
     "dojo/dom",
     "dojo/on",
+    "dojo/query",
     "esri/map",
     "application/widgets/bootstrapmap",
     "application/widgets/Shortlist",
     "application/config",
-    "esri/dijit/BasemapToggle"
+    "esri/dijit/BasemapToggle",
+    "bootstrap/Modal"
 ],
-function (declare, lang, array, domConstruct, dom, on,  Map, BootstrapMap, Shortlist, config, BasemapToggle) {
+function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Modal) {
     return declare(null, {
         startup: function () {
             this.init();
         },
         init: function () {
+            //Init splash
+            query("#splash").modal("show");
+
             //Init Map
             var mapReq = BootstrapMap.createWebMap(config.webmapId, "mapDiv", {
                 mapOptions: {
