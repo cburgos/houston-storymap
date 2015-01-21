@@ -41,14 +41,51 @@
                 <div id="projectToggle"class="btn-group" data-toggle="buttons-radio"></div>
             </div>
             <div class="col-lg-3">
-                <!-- Split button -->  
             </div><!-- /.col-lg-2 -->
         </div> 
     </div>
-    <!-- Step 2. Add HTML to define the layout of the page and the map -->
-    <div>
-        <div class="col-xs-4">
-            <div id="shortlist"></div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Project Info</a>
+                    </h4>
+                </div>
+                <div style="height: auto;" data-dojo-dataid="pid3" id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div id="shortlist"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Layers</a>
+                    </h4>
+                </div>
+                <div style="height: 0px;" data-dojo-dataid="pid2" id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div id="layerControl"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Search</a>
+                    </h4>
+                </div>
+                <div style="height: 0px;" data-dojo-dataid="pid3" id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div id="SearchControl"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            
         </div>
         <div id="mapDiv">
             <div id="splash" class="modal">
@@ -91,6 +128,9 @@
               app.startup();
           });
     </script>
-
+    <!-- jQuery (for Bootstrap's JavaScript plugins) -->
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- Include all  plugins or individual files as needed -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>

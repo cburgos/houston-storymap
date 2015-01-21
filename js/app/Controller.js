@@ -10,6 +10,7 @@
     "esri/map",
     "application/widgets/bootstrapmap",
     "application/widgets/Shortlist",
+    "application/widgets/LayerControl",
     "application/config",
     "esri/dijit/BasemapToggle",
     "esri/geometry/Point",
@@ -19,7 +20,7 @@
     "esri/symbols/PictureMarkerSymbol",
     "bootstrap/Modal"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
+function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, LayerControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
     return declare(null, {
         map: null,
         shortlist : null,
@@ -49,6 +50,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, Boo
             }
             if (this.homeBtn) {
                 domConstruct.destroy(this.homeBtn.id);
+            }
+            if (this.layerControl) {
+                this.layerControl.destroy();
             }
         },
         _init: function (selectedWebmap) {
@@ -142,6 +146,10 @@ function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, Boo
                         this.map.removeLayer(bm.layerObject);
                     }));
                     this.map.setBasemap(basemapHash[basemapTitle]);
+
+                    //Layer Control
+                    this._initLayerControl(selectedWebmap);
+                    
                 }
                 if (result.itemInfo.item.title) {
                     config.title = result.itemInfo.item.title;
@@ -182,6 +190,17 @@ function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, Boo
             }, node);
             shortlist.startup();
             this.shortlist = shortlist;
+        },
+        _initLayerControl: function (selectedWebmap) {
+            var node = domConstruct.create("div", {}, dom.byId("layerControl"), "last");
+
+            var layerControl = new LayerControl({
+                webmap: selectedWebmap,
+                map: this.map
+            }, node);
+
+            layerControl.startup();
+            this.layerControl = layerControl;
         }
 
     });// return
