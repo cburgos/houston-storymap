@@ -5,12 +5,6 @@
 }
 #mapDiv {
     height:100%;
-	width:100%;
-}
-.row {
-    
-}
-.container {
     width:100%;
 }
 
@@ -32,6 +26,7 @@ text-align:right;
 .thumbnail {
     margin-bottom:0px;
     text-align:center;
+    height:180px;
 }
 .thumbnail img {
     max-width: 80px;
