@@ -2,6 +2,7 @@
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom",
     "dojo/on",
@@ -18,8 +19,10 @@
     "esri/symbols/PictureMarkerSymbol",
     "bootstrap/Modal"
 ],
-function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
+function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
     return declare(null, {
+        map: null,
+        shortlist : null,
         startup: function () {
             this.init();
         },
@@ -27,8 +30,33 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
             //Init splash
             query("#splash").modal("show");
 
+            //Load webmap Toggle
+            this.initWebmapToggle();
+        },
+        _cleanup: function () {
+            console.log("calling cleanup...");
+            if (this.map) {
+                this.map.destroy();
+            }
+            if (this.shortlist) {
+                this.shortlist.destroy();
+            }
+            if (this.basemapToggle) {
+                this.basemapToggle.destroy();
+            }
+            if (this.locateBtn) {
+                domConstruct.destroy(this.locateBtn.id);
+            }
+            if (this.homeBtn) {
+                domConstruct.destroy(this.homeBtn.id);
+            }
+        },
+        _init: function (selectedWebmap) {
+            this._cleanup();
+
             //Init Map
-            var mapReq = BootstrapMap.createWebMap(config.webmapId, "mapDiv", {
+            
+            var mapReq = BootstrapMap.createWebMap(selectedWebmap.webmapId, "mapDiv", {
                 mapOptions: {
                     slider: true,
                     wrapAround180: false
@@ -54,6 +82,7 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
                     on(homeBtn, "click", lang.hitch(this, function (event) {
                         this.map.setExtent(homeExtent);
                     }));
+                    this.homeBtn = homeBtn;
 
                     //Locate Button
                     var locateBtn = domConstruct.create("div", {
@@ -87,6 +116,8 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
                         }));
                     }));
 
+                    this.locateBtn = locateBtn;
+
                     //Basemap Toggle
                     var basemapToggle = new BasemapToggle({
                         theme: "basemapToggle",
@@ -95,6 +126,7 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
                         basemap: "satellite"
                     }, domConstruct.create("div", {}, dojo.byId("mapDiv_zoom_slider"), "after"));
                     basemapToggle.startup();
+                    this.basemapToggle = basemapToggle;
 
                     //Fix for basemaps so that togglebasemaps dijit will work
                     //TODO: Add all ESRI basemap strings
@@ -116,15 +148,40 @@ function (declare, lang, array, domConstruct, dom, on, query, Map, BootstrapMap,
                 }
             }));
         },
+        initWebmapToggle: function () {
+            //Foreach webmap in config.webmaps create radio button and attach handler
+            var buttonGroupNode = dom.byId("projectToggle");
+            var selectedBtn = null;
+
+            array.forEach(config.webmaps, lang.hitch(this, function (webmap, i) {
+                
+                var btn = domConstruct.create("button", {
+                    "class": "btn btn-primary",
+                    id:"webmapToggle" + i,
+                    innerHTML: webmap.label,
+                    checked : webmap.checked
+                }, buttonGroupNode, "last");
+
+                //Handle Toggle
+                on(btn, "click", lang.hitch(this, lang.partial(this._init, config.webmaps[i])));
+                if (webmap.checked === true) {
+                    selectedBtn = btn;
+                }
+            }));
+            if (selectedBtn !== null) {
+                selectedBtn.click();
+            }
+        },
         _createShortlist: function (obj) {
-            console.log(obj);
+            var node = domConstruct.create("div", {}, dom.byId("shortlist"), "last");
             var operationalLayers = obj.itemInfo.itemData.operationalLayers || [];
 
             var shortlist = new Shortlist({
                 map: obj.map,
                 operationalLayers : operationalLayers
-            }, "shortlist");
+            }, node);
             shortlist.startup();
+            this.shortlist = shortlist;
         }
 
     });// return
