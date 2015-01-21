@@ -7,24 +7,18 @@
     height:100%;
 	width:100%;
 }
+.row {
+    
+}
 .container {
     width:100%;
-    padding-left:0px;
-    padding-right:0px;
 }
-.logo {
-    display:table-cell;
-}
-.social {
-    display:table-cell;
-    vertical-align: bottom;
-}
-#headerText {
-    display: table-cell;
+
+.headerText {
     color:white;
 }
 .links {
-    display:table-cell;
+text-align:right;
 }
 #msLink {
     color: #C5D5D5;
@@ -33,6 +27,7 @@
     font-size: 13px;
     outline: medium none;
     text-decoration: none;
+    vertical-align:bottom;
 }
 .thumbnail {
     margin-bottom:0px;
@@ -54,7 +49,7 @@
 }
 .basemapToggle{
 	position: relative;
-	left: 20px;
+	left: 15px;
 	top: 155px;
     width:60px;
     height:85px;
