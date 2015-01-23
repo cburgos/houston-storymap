@@ -6,7 +6,6 @@
     "dojo/dom-construct",
     "dojo/dom",
     "dojo/on",
-    "dojo/query",
     "esri/map",
     "application/widgets/bootstrapmap",
     "application/widgets/Shortlist",
@@ -17,10 +16,9 @@
     "esri/geometry/webMercatorUtils",
     "esri/graphic",
     "esri/layers/GraphicsLayer",
-    "esri/symbols/PictureMarkerSymbol",
-    "bootstrap/Modal"
+    "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, BootstrapMap, Shortlist, LayerControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol, Modal) {
+function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
         shortlist : null,
@@ -29,7 +27,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, Boo
         },
         init: function () {
             //Init splash
-            query("#splash").modal("show");
+            $("#splash").modal("show");
 
             //Load webmap Toggle
             this.initWebmapToggle();
@@ -115,7 +113,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, query, Map, Boo
 
 		                    setTimeout(function () {
                                 //TODO: Is this needed?
-		                        query('#locateLayer_layer image').hide();
+		                        $('#locateLayer_layer image').hide();
 		                    }, 10000);
                         }));
                     }));
