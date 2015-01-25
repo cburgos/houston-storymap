@@ -10,6 +10,7 @@
     "application/widgets/bootstrapmap",
     "application/widgets/Shortlist",
     "application/widgets/LayerControl",
+    "application/widgets/SearchControl",
     "application/config",
     "esri/dijit/BasemapToggle",
     "esri/geometry/Point",
@@ -18,7 +19,7 @@
     "esri/layers/GraphicsLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol) {
+function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
         shortlist : null,
@@ -148,11 +149,18 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     //Layer Control
                     this._initLayerControl(selectedWebmap);
                     
-                }
-                if (result.itemInfo.item.title) {
-                    config.title = result.itemInfo.item.title;
+                    //Search Control
+                    this.initSearchControl();
                 }
             }));
+        },
+        initSearchControl : function() {
+            console.log("init search...", this);
+            var node = domConstruct.create("div", {}, dom.byId("SearchControl"), "last");
+            var searchControl = new SearchControl({
+            }, node);
+
+            searchControl.startup();
         },
         initWebmapToggle: function () {
             //Foreach webmap in config.webmaps create radio button and attach handler
@@ -161,17 +169,21 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
             array.forEach(config.webmaps, lang.hitch(this, function (webmap, i) {
                 
-                var btn = domConstruct.create("button", {
+                var label = domConstruct.create("label", {
                     "class": "btn btn-primary",
-                    id:"webmapToggle" + i,
-                    innerHTML: webmap.label,
-                    checked : webmap.checked
+                    innerHTML: webmap.label
                 }, buttonGroupNode, "last");
 
+                var input = domConstruct.create("input", {
+                    "type": "radio",
+                    "name": "webmaps",
+                    "autocomplete": "off"
+                }, label, "first");
+
                 //Handle Toggle
-                on(btn, "click", lang.hitch(this, lang.partial(this._init, config.webmaps[i])));
+                on(label, "click", lang.hitch(this, lang.partial(this._init, config.webmaps[i])));
                 if (webmap.checked === true) {
-                    selectedBtn = btn;
+                    selectedBtn = label;
                 }
             }));
             if (selectedBtn !== null) {
