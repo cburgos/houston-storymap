@@ -51,9 +51,8 @@ text-align:right;
 .basemapToggle{
 	position: relative;
 	left: 15px;
-	top: 155px;
+	top: 85px;
     width:60px;
-    height:85px;
 	text-align: center;
 	border: 1px solid #57585A;
 	background-color: #FFF;
@@ -81,6 +80,7 @@ text-align:right;
 	-o-border-radius: 5px;
 	border-radius: 5px;
     text-align:center;
+    top:85px;
 }
 .locateButton {
     position: relative;
@@ -95,6 +95,7 @@ text-align:right;
 	-o-border-radius: 5px;
 	border-radius: 5px;
     text-align:center;
+    top:85px;
 }
 #splash {
     text-align:center;

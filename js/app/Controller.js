@@ -126,7 +126,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         map: this.map,
                         visible: true,
                         basemap: "hybrid"
-                    }, domConstruct.create("div", {}, dojo.byId("mapDiv_zoom_slider"), "after"));
+                    }, domConstruct.create("div", {}, locateBtn, "after"));
                     basemapToggle.startup();
                     this.basemapToggle = basemapToggle;
 
