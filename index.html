@@ -44,65 +44,67 @@
             </div><!-- /.col-lg-2 -->
         </div> 
     </div>
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Project Info</a>
-                    </h4>
-                </div>
-                <div style="height: auto;" data-dojo-dataid="pid3" id="collapseOne" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div id="shortlist"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Layers</a>
-                    </h4>
-                </div>
-                <div style="height: 0px;" data-dojo-dataid="pid2" id="collapseTwo" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div id="layerControl"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Search</a>
-                    </h4>
-                </div>
-                <div style="height: 0px;" data-dojo-dataid="pid3" id="collapseThree" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div id="SearchControl"></div>
-                    </div>
-                </div>
-            </div>
-            </div>
-
-            
-        </div>
-        <div id="mapDiv">
-            <div id="splash" class="modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">ReBuilding Houston</h4>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Project Info</a>
+                            </h4>
                         </div>
-                        <div class="modal-body embed-responsive-item">
-                            <iframe src="//player.vimeo.com/video/106973057" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <div style="height: auto;" data-dojo-dataid="pid3" id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="shortlist"></div>
+                            </div>
                         </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Layers</a>
+                            </h4>
+                        </div>
+                        <div style="height: 0px;" data-dojo-dataid="pid2" id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div id="layerControl"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-dojo-dataid="pid1" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Search</a>
+                            </h4>
+                        </div>
+                        <div style="height: 0px;" data-dojo-dataid="pid3" id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div id="SearchControl"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="basemapToggle"></div>
-        </div>
+            <div class="col-lg-9">
+                <div id="mapDiv">
+                    <div id="splash" class="modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title">ReBuilding Houston</h4>
+                                </div>
+                                <div class="modal-body embed-responsive-item">
+                                    <iframe src="//player.vimeo.com/video/106973057" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <div id="basemapToggle"></div>
+                </div>
+            </div>
+        </div>        
     </div>
 
     <!-- Step 3. Add JS to load the responsive map -->
