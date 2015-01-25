@@ -125,7 +125,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         theme: "basemapToggle",
                         map: this.map,
                         visible: true,
-                        basemap: "satellite"
+                        basemap: "hybrid"
                     }, domConstruct.create("div", {}, dojo.byId("mapDiv_zoom_slider"), "after"));
                     basemapToggle.startup();
                     this.basemapToggle = basemapToggle;
