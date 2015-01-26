@@ -98,7 +98,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             this.searchType = this.searchTypes[searchType];
         },
         search: function () {
-            console.log("searching...");
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._findAddress(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.PROJECT) {
@@ -116,15 +115,14 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                        outSR: this.map.spatialReference.wkid,
                        f: "json"
                    },
-                   lang.hitch(this, function (result) {
-                       
-                       this._searchAddress(result);
+                   lang.hitch(this, function (result) {                       
+                       this._goToAddress(result);
                    }),
                    "json"
                    );
         },
-        _searchAddress: function (result) {
-            //711 W Alabama St, Houston, Texas, USA
+        _goToAddress: function (result) {
+            //Create a pt from result and zoom + center map on that point
             var loc = result.locations.length ? result.locations[0] : null;
             if (!loc) { return; }
             var pt = new Point(loc.feature.geometry.x, loc.feature.geometry.y, new SpatialReference(result.spatialReference.latestWkid));
@@ -135,6 +133,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             }
         },
         _searchProject: function () {
+            //TODO: Clean up
             var layer = window.app.shortlist.activeLayer;
             var url = layer.url +"/query";
             console.log(url);
