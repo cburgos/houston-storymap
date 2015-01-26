@@ -53,6 +53,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.layerControl) {
                 this.layerControl.destroy();
             }
+            if (this.searchControl) {
+                this.searchControl.destroy();
+            }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -155,12 +158,13 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             }));
         },
         initSearchControl : function() {
-            console.log("init search...", this);
             var node = domConstruct.create("div", {}, dom.byId("SearchControl"), "last");
             var searchControl = new SearchControl({
+                map: this.map
             }, node);
 
             searchControl.startup();
+            this.searchControl = searchControl;
         },
         initWebmapToggle: function () {
             //Foreach webmap in config.webmaps create radio button and attach handler
