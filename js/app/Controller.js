@@ -139,14 +139,19 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     this.basemapToggle = basemapToggle;
 
                     //Fix for basemaps so that togglebasemaps dijit will work
-                    //TODO: Add all ESRI basemap strings
-
                     var basemapHash = {
                         "National Geographic": "national-geographic",
-                        "Streets": "streets"
+                        "Streets": "streets",
+                        "Topographic": "topo",
+                        "Imagery": "satellite",
+                        "Imagery with Labels": "hybrid",
+                        "Dark Gray Canvas": "dark-gray",
+                        "Light Gray Canvas": "gray",
+                        "Oceans": "oceans",
+                        "Terrain with Labels": "terrain",
+                        "OpenStreetMap": "osm"
                     };
                     var basemapTitle = result.itemInfo.itemData.baseMap.title;
-
 
                     array.forEach(result.itemInfo.itemData.baseMap.baseMapLayers, lang.hitch(this, function (bm) {
                         this.map.removeLayer(bm.layerObject);
