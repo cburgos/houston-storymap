@@ -17,7 +17,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         map: null,
         operationalLayers: null,
         tabListItems: null,
-        activeLayer : null,
+        activeLayer: null,
         constructor : function() {
             this.inherited(arguments);
 
@@ -27,10 +27,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         startup: function () {
             this._createTabs();
             this.updateList();
-
-            this.map.on("extent-change", lang.hitch(this, function () {
-                this.updateList();
-            }));
         },
         _createTabs: function () {
             //Foreach operational  layer, create a tab
@@ -42,38 +38,38 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var li = domConstruct.create("li", {
                     "role": "presentation"
                 });
+                var aTag = domConstruct.create("a", {
+                    innerHTML: title,
+                    "role": "tab",
+                    "data-toggle":"tab"
+                }, li);
+
                 if (operationalLayer.visibility) {
                     this.activeLayer = operationalLayer.layerObject;
-                    domClass.add(li, "active");
+                    $(li).tab('show');
+                } else {
+                    $(li).tab();
                 }
-                var aTag = domConstruct.create("a", {
-                    innerHTML : title
-                }, li);
-               
-                //TODO: Handle Click of tab
                 domConstruct.place(li, tabContainer, "last");
-                on(li, "click", lang.hitch(this, function (event) {
-                    if (domClass.contains(li, "active")) {
-                        return;
-                    } else {
-                        array.forEach(this.operationalLayers, function (opLayer) {
-                            domClass.remove(opLayer.widgetNode, "active");
-                            opLayer.layerObject.hide();
-                        });
-                        domClass.add(li, "active");
-                        operationalLayer.layerObject.show();
-                        this.activeLayer = operationalLayer.layerObject;
-                        this.updateList();
-                    }
+                
+                //TODO: Handle Click of tab
+                $(aTag).on('shown.bs.tab', lang.hitch(this, function (e) {
+                    this.activeLayer = operationalLayer.layerObject;
+                    array.forEach(this.operationalLayers, function (opLayer) {
+                        opLayer.layerObject.setVisibility(!opLayer.layerObject.visible);
+                    });                    
+                    this.updateList();
                 }));
                 //Add widgetNode property to operationalLayer
                 operationalLayer.widgetNode = li;
             }));
         },
         updateList: function () {
-            var row = domConstruct.create("div", {
-            });
             this.activeLayer.on("update-end", lang.hitch(this, function (event) {
+                var row = domConstruct.create("div", {
+                    "class": "row"
+                });
+                $(".thumbContainer").empty();
                 array.forEach(this.activeLayer.graphics, lang.hitch(this, function (graphic) {
                     //Create thumbnails
                     var col = domConstruct.create("div", {
@@ -87,17 +83,15 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     }, aTag, "last");
                     var label = domConstruct.create("label", {
                         innerHTML: graphic.attributes[config.shortlistDisplayField],
-                        "style" : "font-size:10px;"
+                        "style": "font-size:10px;"
                     }, img, "after");
                     //Col click
                     on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));
                 }));
-                domConstruct.empty(this.thumbContainer);
-                domConstruct.place(row, this.thumbContainer, "last");
+                $(".thumbContainer").html(row);
             }));            
         },
         selectGraphic: function (graphic, evt) {
-            console.log("selecting graphic...", graphic);
             var title = graphic.attributes[config.shortlistDisplayField];
             
             //Open infowindow
