@@ -45,6 +45,13 @@ text-align:right;
     overflow-x:hidden;
 }
 
+#SearchControl {
+position: absolute;
+z-index: 5;
+padding-left: 100px;
+padding-top: 15px;
+
+}
 .basemapBG {
     height:60px;
 }
