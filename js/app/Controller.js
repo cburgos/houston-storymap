@@ -74,10 +74,15 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     this._createShortlist(result);
 
+                    //slider titles
+                    $(".esriSimpleSliderIncrementButton").prop("title", "Zoom In");
+                    $(".esriSimpleSliderDecrementButton").prop("title", "Zoom Out");
+
                     //Home Button
                     var homeExtent = result.map.extent;
                     var homeBtn = domConstruct.create("div", {
-                        "class": "homeButton"
+                        "class": "homeButton",
+                        "title": "Default Extent"
                     }, dom.byId("mapDiv_zoom_slider"), "after");
                     var homeImg = domConstruct.create("img", {
                         src: "images/ZoomHome.png"
@@ -90,7 +95,8 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     //Locate Button
                     var locateBtn = domConstruct.create("div", {
-                        "class": "locateButton"
+                        "class": "locateButton",
+                        "title" : "My Location"
                     }, homeBtn, "after");
                     var locateImg = domConstruct.create("img", {
                         src: "images/locateButton.png"
