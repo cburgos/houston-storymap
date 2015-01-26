@@ -34,7 +34,6 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             this.initWebmapToggle();
         },
         _cleanup: function () {
-            console.log("calling cleanup...");
             if (this.map) {
                 this.map.destroy();
             }
@@ -69,7 +68,6 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                 }
             });
             mapReq.then(lang.hitch(this, function (result) {
-                console.log(result);
                 if (result.map) {
                     this.map = result.map;
                     this.map.enableScrollWheelZoom();
