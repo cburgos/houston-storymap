@@ -12,9 +12,10 @@
     "dojo/text!application/widgets/templates/SearchControl.html",
     "esri/geometry/Point",
     "esri/SpatialReference",
-    "esri/tasks/locator"
+    "esri/tasks/locator",
+    "esri/tasks/query"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, SpatialReference, Locator) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, SpatialReference, Locator, Query) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -134,23 +135,23 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             }
         },
         _searchProject: function () {
-            var url = window.app.shortlist.activeLayer.url;
+            var layer = window.app.shortlist.activeLayer;
+            var url = layer.url +"/query";
             console.log(url);
-            /*
-            $.get(
-                  "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find",
-                  {
-                      text: text,
-                      //magicKey: magicKey,
-                      outSR: this.map.spatialReference.wkid,
-                      f: "json"
-                  },
-                  lang.hitch(this, function (result) {
-
-                      this._searchAddress(result);
-                  }),
-                  "json"
-                  );*/
+            console.log($(this.searchInput));
+            var t = $(this.searchInput).context.value;
+            var q = new Query();
+            q.outFields = ["*"];
+            q.returnGeometry = true;
+            q.where = config.shortlistDisplayField + " LIKE '%" + t + "%'";
+            console.log(t);
+            layer.queryFeatures(q, function (featureSet) {
+                var result;
+                if (featureSet.features.length > 0) {
+                    result = featureSet.features[0];
+                    window.app.shortlist.selectGraphic(result);
+                }
+            });
         }
     });// return
 }); //define
