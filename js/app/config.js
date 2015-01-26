@@ -7,6 +7,7 @@
     pageTitle: "",
     shortlistDisplayField: "PRO_SCOPE",
     imageField: "PROJ_IMAGE",
+    locatorUrl : "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
     webmaps : [
         {
             label: "Streets & Drainage",
