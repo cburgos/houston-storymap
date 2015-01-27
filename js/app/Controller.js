@@ -30,6 +30,8 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             //Init splash
             $("#splash").modal("show");
 
+            $('#layerControlModel3').modal();
+
             $('#layerControlModel3').modal({ "show" : false, backdrop : false });
             $("#layerControlModel3").draggable({ handle: ".modal-header" });
                        
