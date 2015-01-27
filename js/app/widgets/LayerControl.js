@@ -29,7 +29,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             //foreach reference layer create layer, add to map, and add input
             domConstruct.empty(this.layerListContainer);
 
-            array.forEach(this.webmap.referenceLayers, lang.hitch(this, function (refLayer) {
+            array.forEach(this.webmap.referenceLayers, lang.hitch(this, function (refLayer, i) {
                 var li = domConstruct.create("li", {
                     "class": "list-group-item"
                 }, this.layerListContainer, "last");
@@ -46,10 +46,10 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var layer = new FeatureLayer(refLayer.url, {
                     visible:false
                 });
-                this.map.addLayer(layer);
+                this.map.addLayer(layer, i);
                 this.layers.push(layer);
                 // Handle click
-                on(li, "click", function () {
+                on(input, "click", function () {
                     layer.setVisibility(!layer.visible);
                 });
             }));
