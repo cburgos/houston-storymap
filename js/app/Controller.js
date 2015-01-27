@@ -30,10 +30,8 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             //Init splash
             $("#splash").modal("show");
 
-            $('#layerControlModel3').modal();
-
-            $('#layerControlModel3').modal({ "show" : false, backdrop : false });
-            $("#layerControlModel3").draggable({ handle: ".modal-header" });
+            $('#layerControlModal').modal({ "show" : false, backdrop : false });
+            $("#layerControlModal").draggable({ handle: ".modal-header" });
                        
 
             //Load webmap Toggle
@@ -148,14 +146,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }, DataBtn, "last");
 
                     on(DataBtn, "click", lang.hitch(this, function (event) {
-                        //this._initLayerControl(selectedWebmap);
-                        //alert("Data Layer clicked");
-                        console.log($('#layerControlModel3'));
-                        $('#layerControlModel3').modal('show');
-
-                        
-                        //$("#layerControlModel3").dialog('open');
-                        
+                        $('#layerControlModal').modal('show');                        
                         
                     }));
                     this.DataBtn = DataBtn;
