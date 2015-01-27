@@ -35,12 +35,20 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }, this.layerListContainer, "last");
                 var label = domConstruct.create("label", {
                     "class": "btn btn-primary",
-                    innerHTML: "&nbsp;"+ refLayer.label
+                    innerHTML: "&nbsp; - "+ refLayer.label
                 }, li, "last");
                 var input = domConstruct.create("input", {
                     "type": "checkbox",
-                    "autocomplete": "off"
+                    "autocomplete": "off"                    
                 }, label, "first");
+
+                var span = domConstruct.create("span", {
+                    innerHTML: "&nbsp; - "
+                }, input, "after");
+
+                var img = domConstruct.create("img", {
+                    "src": refLayer.LegendURL
+                }, input, "after");
 
                 //Create layer and add to map
                 var layer = new FeatureLayer(refLayer.url, {

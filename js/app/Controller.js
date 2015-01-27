@@ -30,6 +30,10 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             //Init splash
             $("#splash").modal("show");
 
+            $('#layerControlModel3').modal({ "show" : false, backdrop : false });
+            $("#layerControlModel3").draggable({ handle: ".modal-header" });
+                       
+
             //Load webmap Toggle
             this.initWebmapToggle();
         },
@@ -55,6 +59,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.searchControl) {
                 this.searchControl.destroy();
             }
+             if (this.layerControl) {
+                this.layerControl.destroy();
+            }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -78,6 +85,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     $(".esriSimpleSliderIncrementButton").prop("title", "Zoom In");
                     $(".esriSimpleSliderDecrementButton").prop("title", "Zoom Out");
 
+                  
                     //Home Button
                     var homeExtent = result.map.extent;
                     var homeBtn = domConstruct.create("div", {
@@ -128,6 +136,29 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     this.locateBtn = locateBtn;
 
+                    //Locate Button
+                    var DataBtn = domConstruct.create("div", {
+                        "class": "DataLayer",
+                        "title": "Data Layer"
+                    }, homeBtn, "after");
+                    var DataImg = domConstruct.create("img", {
+                        src: "images/DataLayer.png"
+                    }, DataBtn, "last");
+
+                    on(DataBtn, "click", lang.hitch(this, function (event) {
+                        //this._initLayerControl(selectedWebmap);
+                        //alert("Data Layer clicked");
+                        console.log($('#layerControlModel3'));
+                        $('#layerControlModel3').modal('show');
+
+                        
+                        //$("#layerControlModel3").dialog('open');
+                        
+                        
+                    }));
+                    this.DataBtn = DataBtn;
+
+
                     //Basemap Toggle
                     var basemapToggle = new BasemapToggle({
                         theme: "basemapToggle",
@@ -163,6 +194,8 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     
                     //Search Control
                     this.initSearchControl();
+
+
                 }
             }));
         },

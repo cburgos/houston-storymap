@@ -52,6 +52,23 @@ padding-left: 100px;
 padding-top: 15px;
 
 }
+
+.DataLayer {
+    position: relative;
+	left: 15px;
+    z-index:5;
+    width:32px;
+    height:32px;
+    background-color:white;
+    border:1px solid #CCC;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+    text-align:center;
+    top:85px;
+}
+
 .basemapBG {
     height:60px;
 }
@@ -106,4 +123,12 @@ padding-top: 15px;
 }
 #splash {
     text-align:center;
+}
+
+#layerControlModel3
+{
+    position: absolute;
+    float:right;
+    top:105px;
+
 }
