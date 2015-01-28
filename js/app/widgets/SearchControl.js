@@ -141,7 +141,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._addressTypeAhead();
             } else if (this.searchType === this.searchTypes.PROJECT) {
-                //
+                this._projectTypeAhead();
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
                 this._cityCouncilDistrictsTypeAhead();
             } else if (this.searchType === this.searchTypes.SUPER_NEIGHBORHOOD) {
@@ -177,6 +177,42 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }
             });
         },
+        _projectTypeAhead: function () {
+            var self = this;
+            var url = window.app.shortlist.activeLayer.url + "/query";
+            $(this.searchInput).typeahead({
+                ajax: {
+                    url: url,
+                    method: "GET",
+                    triggerLength: 1,
+                    displayField: "text",
+                    preDispatch: function (query) {
+                        var whereClause = "upper(" + config.shortlistDisplayField + ") LIKE '%" + query.toUpperCase() + "%'";
+                        return {
+                            "where": whereClause,
+                            "outFields":"*",
+                            f: "json"
+                        };
+                    },
+                    preProcess: function (data) {
+                        var suggestions = [];
+                        array.forEach(data.features, function (feat) {
+                            var suggestion = {
+                                text: feat.attributes[config.shortlistDisplayField],
+                                val: feat.attributes[config.shortlistDisplayField]
+                            };
+                            suggestions.push(suggestion);
+                        });
+                        return suggestions;
+                    },
+                    dataType: "json"
+                },
+                display: "text",
+                val: "val",
+                items: 6,
+                itemSelected: lang.hitch(self, self._projectSearch)
+            });
+        },
         _cityCouncilDistrictsTypeAhead: function () {
             var self = this;
             $(this.searchInput).typeahead({
@@ -184,14 +220,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 display: "text",
                 val: "text",
                 items: 6,
-                itemSelected: function (fn,val,text) {
-                    var qt = new QueryTask(config.cityCouncilDistrictsService);
-                    var q = new Query();
-                    q.where = "DISTRICT ='" + val + "'";
-                    q.returnGeometry = true;
-                    q.outSpatialReference = self.map.spatialReference;
-                    qt.execute(q, lang.hitch(self, self._goToLocation));
-                }
+                itemSelected: lang.hitch(self, self._cityCouncilDistrictSearch)
             });
         },
         _superNeighborhoodsTypeAhead: function () {
@@ -201,14 +230,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 display: "text",
                 val: "text",
                 items: 6,
-                itemSelected: function (fn, val, text) {
-                    var qt = new QueryTask(config.superNeighborhoodService);
-                    var q = new Query();
-                    q.where = "SNBNAME ='" + val + "'";
-                    q.returnGeometry = true;
-                    q.outSpatialReference = self.map.spatialReference;
-                    qt.execute(q, lang.hitch(self, self._goToLocation));
-                }
+                itemSelected: lang.hitch(self, self._superNeighborhoodsSearch)
             });
         },
         _goToLocation: function (featureSet) {
@@ -217,6 +239,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var center;
                 if (feat.geometry.type === "polygon") {
                     center = feat.geometry.getCentroid();
+                } else if (feat.geometry.type === "point") {
+                    center = feat.geometry;
                 }
                 this._zoomToPoint(center);
             }
@@ -233,10 +257,39 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._findAddress(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.PROJECT) {
-                this._searchProject();
+                this._projectSearch(null, null, this.searchInput.value);
+            } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
+                this._cityCouncilDistrictSearch(null, null, this.searchInput.value);
+            } else if (this.searchType === this.searchTypes.SUPER_NEIGHBORHOOD) {
+                this._superNeighborhoodsSearch(null, null, this.searchInput.value);
             } else {
                 console.warn("Invalid search type.", this.searchType);
             }
+        },
+        _cityCouncilDistrictSearch: function (fn, val, text) {
+            var qt = new QueryTask(config.cityCouncilDistrictsService);
+            var q = new Query();
+            q.where = "DISTRICT ='" + val + "'";
+            q.returnGeometry = true;
+            q.outSpatialReference = this.map.spatialReference;
+            qt.execute(q, lang.hitch(this, this._goToLocation));
+        },
+        _superNeighborhoodsSearch: function (fn, val, text) {
+            var qt = new QueryTask(config.superNeighborhoodService);
+            var q = new Query();
+            q.where = "SNBNAME ='" + val + "'";
+            q.returnGeometry = true;
+            q.outSpatialReference = this.map.spatialReference;
+            qt.execute(q, lang.hitch(this, this._goToLocation));
+        },
+        _projectSearch: function (fn, val, text) {
+            var url = window.app.shortlist.activeLayer.url + "/query";
+            var qt = new QueryTask(url);
+            var q = new Query();
+            q.where = config.shortlistDisplayField + "='" + val + "'";
+            q.returnGeometry = true;
+            q.outSpatialReference = this.map.spatialReference;
+            qt.execute(q, lang.hitch(this, this._goToLocation));
         },
         _findAddress: function (fn, magicKey, text) {
             $.get(
@@ -259,26 +312,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             if (!loc) { return; }
             var pt = new Point(loc.feature.geometry.x, loc.feature.geometry.y, new SpatialReference(result.spatialReference.latestWkid));
             this._zoomToPoint(pt);
-        },
-        _searchProject: function () {
-            //TODO: Clean up
-            var layer = window.app.shortlist.activeLayer;
-            var url = layer.url +"/query";
-            console.log(url);
-            console.log($(this.searchInput));
-            var t = $(this.searchInput).context.value;
-            var q = new Query();
-            q.outFields = ["*"];
-            q.returnGeometry = true;
-            q.where = config.shortlistDisplayField + " LIKE '%" + t + "%'";
-            console.log(t);
-            layer.queryFeatures(q, function (featureSet) {
-                var result;
-                if (featureSet.features.length > 0) {
-                    result = featureSet.features[0];
-                    window.app.shortlist.selectGraphic(result);
-                }
-            });
         }
     });// return
 }); //define
