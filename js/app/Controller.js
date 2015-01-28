@@ -53,6 +53,12 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.homeBtn) {
                 domConstruct.destroy(this.homeBtn.id);
             }
+            if (this.dataLayerButton) {
+                domConstruct.destroy(this.dataLayerButton);
+            }
+            if (this.toggleProjectsButton) {
+                domConstruct.destroy(this.toggleProjectsButton);
+            }
             if (this.layerControl) {
                 this.layerControl.destroy();
             }
@@ -136,20 +142,58 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     this.locateBtn = locateBtn;
 
-                    //Locate Button
-                    var DataBtn = domConstruct.create("div", {
+                    //Data Layer Button
+                    var dataLayerButton = domConstruct.create("div", {
                         "class": "DataLayer",
                         "title": "Data Layer"
                     }, homeBtn, "after");
                     var DataImg = domConstruct.create("img", {
                         src: "images/DataLayer.png"
-                    }, DataBtn, "last");
+                    }, dataLayerButton, "last");
 
-                    on(DataBtn, "click", lang.hitch(this, function (event) {
+                    on(dataLayerButton, "click", lang.hitch(this, function (event) {
                         $('#layerControlModal').modal('show');                        
                         
                     }));
-                    this.DataBtn = DataBtn;
+                    this.dataLayerButton = dataLayerButton;
+
+                    //Toggle Projects button
+                    //Data Layer Button
+                    var toggleProjectsButton = domConstruct.create("div", {
+                        "class": "toggleProjectsButton",
+                        "title": "Show / Hide Projects"
+                    }, dataLayerButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-wrench",
+                        "aria-hidden":true
+                    }, toggleProjectsButton, "last");
+
+                    on(toggleProjectsButton, "click", lang.hitch(this, function (event) {
+                        //$('#layerControlModal').modal('show');
+                        if ($(".main-side-container").css("visibility") !== "hidden") {
+                            //Full size map
+                            $(".main-side-container").css("visibility", "hidden");
+                            $(".main-side-container").css("position", "absolute");
+                            $(".main-side-container").removeClass("col-lg-4");
+
+                            $(".main-map-container").css("position", "absolute");
+                            $(".main-map-container").removeClass("col-lg-8");
+                            $(".main-map-container").addClass("col-lg-12");
+                        } else {
+                            //non full size map
+                            $(".main-side-container").css("visibility", "visible");
+                            $(".main-side-container").css("position", "");
+                            $(".main-side-container").addClass("col-lg-4");
+
+                            $(".main-map-container").css("position", "");
+                            $(".main-map-container").removeClass("col-lg-12");
+                            $(".main-map-container").addClass("col-lg-8");
+                        }
+                        this.map.resize();
+                        this.map.reposition();                        
+
+                    }));
+                    this.toggleProjectsButton = toggleProjectsButton;
 
 
                     //Basemap Toggle

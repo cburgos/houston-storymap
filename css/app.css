@@ -67,8 +67,11 @@ padding-top: 15px;
 	border-radius: 5px;
     text-align:center;
     top:85px;
+    cursor:pointer;  
 }
-
+.DataLayer:hover {
+    background-color:#EEE;
+}
 .basemapBG {
     height:60px;
 }
@@ -90,6 +93,7 @@ padding-top: 15px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
 	z-index:5;
+    cursor:pointer;  
 }
 .homeButton {
     position: relative;
@@ -105,6 +109,10 @@ padding-top: 15px;
 	border-radius: 5px;
     text-align:center;
     top:85px;
+    cursor:pointer;  
+}
+.homeButton:hover {
+    background-color:#EEE;
 }
 .locateButton {
     position: relative;
@@ -120,6 +128,32 @@ padding-top: 15px;
 	border-radius: 5px;
     text-align:center;
     top:85px;
+    cursor:pointer;  
+}
+.locateButton:hover {
+    background-color:#EEE;
+}
+.toggleProjectsButton {
+    position: relative;
+	left: 15px;
+    z-index:5;
+    width:32px;
+    height:32px;
+    background-color:white;
+    border:1px solid #CCC;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+    text-align:center;
+    top:85px;
+    cursor:pointer;  
+}
+.toggleProjectsButton:hover {
+    background-color:#EEE;
+}
+.toggleProjectsButton span {
+    vertical-align:middle;  
 }
 #splash {
     text-align:center;
