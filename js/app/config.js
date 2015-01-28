@@ -7,7 +7,9 @@
     pageTitle: "",
     shortlistDisplayField: "PRO_SCOPE",
     imageField: "PROJ_IMAGE",
-    locatorUrl : "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+    locatorUrl: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+    cityCouncilDistrictsService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
+    superNeighborhoodService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
     webmaps : [
         {
             label: "Streets & Drainage",

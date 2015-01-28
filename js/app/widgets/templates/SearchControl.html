@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-12" style="width:500px">
             <div class="input-group">
-                <div class="input-group-btn">
+                <div data-dojo-attach-point="searchDropdownContainer" class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle searchDropdown" data-toggle="dropdown" aria-expanded="false">
                         <span data-dojo-attach-point="searchTypeLabel">Address</span>
                         <span class="caret"></span>
@@ -10,6 +10,8 @@
                     <ul class="dropdown-menu" role="menu">
                         <li class="searchType"><a href="#">Address</a></li>
                         <li class="searchType"><a href="#">Project</a></li>
+                        <li class="searchType"><a href="#">Super Neighborhood</a></li>
+                        <li class="searchType"><a href="#">City Council Districts</a></li>
                     </ul>
                 </div><!-- /btn-group -->             
                 <input data-dojo-attach-point="searchInput" type="text" class="form-control" aria-label="...">

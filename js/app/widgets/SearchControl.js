@@ -13,9 +13,10 @@
     "esri/geometry/Point",
     "esri/SpatialReference",
     "esri/tasks/locator",
+    "esri/tasks/QueryTask",
     "esri/tasks/query"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, SpatialReference, Locator, Query) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, SpatialReference, Locator, QueryTask, Query) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -25,15 +26,21 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         inputFocusHandler : null,
         searchInput : null,
         searchTypeLabel: null,
+        superNeighborhoods: null,
+        cityCouncilDistricts: null,
         searchTypes: {
             "ADDRESS": "ADDRESS",
-            "PROJECT": "PROJECT"
+            "PROJECT": "PROJECT",
+            "SUPER_NEIGHBORHOOD": "SUPER_NEIGHBORHOOD",
+            "CITY_COUNCIL_DISTRICTS": "CITY_COUNCIL_DISTRICTS",
         },
         searchType: "",
         searchButton: null,
         constructor: function () {
             this.inherited(arguments);
             this.layers = [];
+            this.superNeighborhoods = [];
+            this.cityCouncilDistricts = [];
             if (config.locatorUrl) {
                 this.locator = new Locator(config.locatorUrl);
             } else {
@@ -42,6 +49,50 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
 
             //Set address as default searchType
             this.searchType = this.searchTypes.ADDRESS;
+        },
+        _getSuperNeighborhoods : function () {
+            //Get list of all possible entries from service
+            //To be used for type ahead
+            //SNBNAME
+            var self = this;
+            var qt = new QueryTask(config.superNeighborhoodService);
+            var query = new Query();
+            query.returnGeometry = false;
+            query.where = "1=1";
+            qt.execute(query, function (featureSet) {
+                var suggestions = [];
+                array.forEach(featureSet.features, function (feature) {
+                    var suggestion = {
+                        text: feature.attributes[featureSet.displayFieldName],
+                        val: feature.attributes[featureSet.displayFieldName],
+                        displayFieldName : featureSet.displayFieldName
+                    };
+                    suggestions.push(suggestion);
+                });
+                self.superNeighborhoods = suggestions;
+            });
+        },
+        _getCityCouncilDistricts: function () {
+            //Get list of all possible entries from service
+            //To be used for type ahead
+            //DISTRICT
+            var self = this;
+            var qt = new QueryTask(config.cityCouncilDistrictsService);
+            var query = new Query();
+            query.returnGeometry = false;
+            query.where = "1=1";
+            qt.execute(query, function (featureSet) {
+                var suggestions = [];
+                array.forEach(featureSet.features, function (feature) {
+                    var suggestion = {
+                        text: feature.attributes[featureSet.displayFieldName],
+                        val: feature.attributes[featureSet.displayFieldName],
+                        displayFieldName : featureSet.displayFieldName
+                    };
+                    suggestions.push(suggestion);
+                });
+                self.cityCouncilDistricts = suggestions;
+            });
         },
         startup: function () {
             //init dropdowns
@@ -63,30 +114,62 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             //Handle click of search button
             $(this.searchButton).on("click", lang.hitch(this, "search"));
 
+            this._getSuperNeighborhoods();
+            this._getCityCouncilDistricts();
+
+            //Init typeahead
+            this.updateTypeahead();
+        },
+        _updateSearchType: function (searchType) {
+            if (searchType.indexOf(" " > -1)) {
+                var regex = new RegExp(' ', 'g');
+                searchType = searchType.replace(regex, "_");
+            }
+            this.searchType = this.searchTypes[searchType];
+            //Update type ahead
+            this.updateTypeahead();
+        },
+        updateTypeahead: function () {
+            //TODO: Is there a better way to destroy tpeahead without getting rid of whole input?
+            domConstruct.destroy(this.searchInput);
+            this.searchInput = domConstruct.create("input", {
+                type: "text",
+                "class": "form-control",
+                "aria-label": "..."
+            }, this.searchDropdownContainer, "after");
+
+            if (this.searchType === this.searchTypes.ADDRESS) {
+                this._addressTypeAhead();
+            } else if (this.searchType === this.searchTypes.PROJECT) {
+                //
+            } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
+                this._cityCouncilDistrictsTypeAhead();
+            } else if (this.searchType === this.searchTypes.SUPER_NEIGHBORHOOD) {
+                this._superNeighborhoodsTypeAhead();
+            }
+        },
+        _addressTypeAhead: function () {
+            var self = this;
             $(this.searchInput).typeahead({
                 ajax: {
-                    url: (self.searchType === self.searchTypes.ADDRESS) ? "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest" : "TODO, attribute url" ,
+                    url:"//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest",
                     method: "GET",
-                    triggerLength: 3,
-                    displayField: (self.searchType === self.searchTypes.ADDRESS) ? "text" : config.shortlistDisplayField,
+                    triggerLength: 1,
+                    displayField:"text",
                     preDispatch: function (query) {
-                        if(self.searchType === self.searchTypes.ADDRESS) {
-                            return {
-                                text: query,
-                                f: "json",
-                                dataType: "json",
-                                maxLocations: 6
-                            };
-                        }                    
+                        return {
+                            text: query,
+                            f: "json",
+                            dataType: "json",
+                            maxLocations: 6
+                        };                            
                     },
                     preProcess: function (data) {
-                        if(self.searchType === self.searchTypes.ADDRESS) {
-                            return data.suggestions;
-                        }                        
+                        return data.suggestions;
                     },
                     dataType: "json"
                 },
-                display: (self.searchType === self.searchTypes.ADDRESS) ? "text" : config.shortlistDisplayField,
+                display: "text",
                 val: "magicKey",
                 items: 6,
                 itemSelected: function (fn, magicKey, text) {
@@ -94,8 +177,57 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }
             });
         },
-        _updateSearchType: function (searchType) {
-            this.searchType = this.searchTypes[searchType];
+        _cityCouncilDistrictsTypeAhead: function () {
+            var self = this;
+            $(this.searchInput).typeahead({
+                source: self.cityCouncilDistricts,
+                display: "text",
+                val: "text",
+                items: 6,
+                itemSelected: function (fn,val,text) {
+                    var qt = new QueryTask(config.cityCouncilDistrictsService);
+                    var q = new Query();
+                    q.where = "DISTRICT ='" + val + "'";
+                    q.returnGeometry = true;
+                    q.outSpatialReference = self.map.spatialReference;
+                    qt.execute(q, lang.hitch(self, self._goToLocation));
+                }
+            });
+        },
+        _superNeighborhoodsTypeAhead: function () {
+            var self = this;
+            $(this.searchInput).typeahead({
+                source : self.superNeighborhoods,
+                display: "text",
+                val: "text",
+                items: 6,
+                itemSelected: function (fn, val, text) {
+                    var qt = new QueryTask(config.superNeighborhoodService);
+                    var q = new Query();
+                    q.where = "SNBNAME ='" + val + "'";
+                    q.returnGeometry = true;
+                    q.outSpatialReference = self.map.spatialReference;
+                    qt.execute(q, lang.hitch(self, self._goToLocation));
+                }
+            });
+        },
+        _goToLocation: function (featureSet) {
+            if (featureSet.features.length > 0) {
+                var feat = featureSet.features[0];
+                var center;
+                if (feat.geometry.type === "polygon") {
+                    center = feat.geometry.getCentroid();
+                }
+                this._zoomToPoint(center);
+            }
+        },
+        _zoomToPoint: function (pt) {
+            //Zoom and center map at a given pt
+            if (this.map.getLevel() !== 15) {
+                this.map.centerAndZoom(pt, 15);
+            } else {
+                this.map.centerAt(pt);
+            }
         },
         search: function () {
             if (this.searchType === this.searchTypes.ADDRESS) {
@@ -126,11 +258,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             var loc = result.locations.length ? result.locations[0] : null;
             if (!loc) { return; }
             var pt = new Point(loc.feature.geometry.x, loc.feature.geometry.y, new SpatialReference(result.spatialReference.latestWkid));
-            if (this.map.getLevel() !== 15) {
-                this.map.centerAndZoom(pt, 15);
-            } else {
-                this.map.centerAt(pt);
-            }
+            this._zoomToPoint(pt);
         },
         _searchProject: function () {
             //TODO: Clean up
