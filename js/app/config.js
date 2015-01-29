@@ -83,7 +83,7 @@
             checked : false
         },
         {
-            label: "Both",
+            label: "All",
             webmapId: "9e41c704aae1454c803a3ebf236f692f",
             referenceLayers: [
             {
