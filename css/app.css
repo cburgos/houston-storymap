@@ -3,10 +3,17 @@ margin: 0;
 padding: 0;
 overflow: hidden;
 }
+
 .page-header {
     background-color:#2B7DA2;
     margin-top:0;
     margin-bottom:0;
+}
+.main-side-container {
+    padding:0px;
+}
+.main-map-container {
+    padding:0px;
 }
 #mapDiv {
     left:0px;
@@ -19,15 +26,6 @@ overflow: hidden;
 }
 .links {
 text-align:right;
-}
-#msLink {
-    color: #C5D5D5;
-    font-family: "open_sansregular",sans-serif;
-    font-weight: normal !important;
-    font-size: 13px;
-    outline: medium none;
-    text-decoration: none;
-    vertical-align:bottom;
 }
 .thumbnail {
     margin-bottom:0px;
