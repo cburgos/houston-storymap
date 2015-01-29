@@ -81,6 +81,41 @@
             }
             ],
             checked : false
+        },
+        {
+            label: "Both",
+            webmapId: "9e41c704aae1454c803a3ebf236f692f",
+            referenceLayers: [
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
+                label: "CIP Drainage Projects"
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
+                label: "CIP Streets Projects"
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
+                label: "CIP Water Projects"
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
+                label: "CIP Wastewater Projects"
+            },
+            {
+                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
+                label: "Zip Codes"
+            },
+            {
+                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
+                label: "Super Neighborhood"
+            },
+            {
+                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
+                label: "City Council Districts"
+            }
+            ],
+            checked: false
         }
     ]
 });
