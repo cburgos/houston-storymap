@@ -11,12 +11,14 @@
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!application/widgets/templates/SearchControl.html",
     "esri/geometry/Point",
+    "esri/graphic",
     "esri/SpatialReference",
     "esri/tasks/locator",
     "esri/tasks/QueryTask",
-    "esri/tasks/query"
+    "esri/tasks/query",
+    "esri/symbols/SimpleFillSymbol"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, SpatialReference, Locator, QueryTask, Query) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -234,16 +236,22 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 itemSelected: lang.hitch(self, self._superNeighborhoodsSearch)
             });
         },
-        _goToLocation: function (featureSet) {
+        _goToLocation: function (featureSet, showBoundary) {
+            //Clear any map graphics
+            this.map.graphics.clear();
+
             if (featureSet.features.length > 0) {
                 var feat = featureSet.features[0];
                 var center;
                 if (feat.geometry.type === "polygon") {
-                    center = feat.geometry.getCentroid();
+                    if (showBoundary === true) {
+                        this.showBoundary(feat.geometry);
+                    }
+                    this.map.setExtent(feat.geometry.getExtent());
                 } else if (feat.geometry.type === "point") {
                     center = feat.geometry;
-                }
-                this._zoomToPoint(center);
+                    this._zoomToPoint(center);
+                }                
             }
         },
         _zoomToPoint: function (pt) {
@@ -253,6 +261,13 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             } else {
                 this.map.centerAt(pt);
             }
+        },
+        showBoundary: function(geometry) {
+            if (geometry.type === "polygon") {
+                var graphic = new Graphic(geometry, new SimpleFillSymbol(), null, null);
+                this.map.graphics.add(graphic);
+            }
+            
         },
         search: function () {
             if (this.searchType === this.searchTypes.ADDRESS) {
@@ -273,7 +288,9 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             q.where = "DISTRICT ='" + val + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
-            qt.execute(q, lang.hitch(this, this._goToLocation));
+            qt.execute(q, lang.hitch(this, function (featureSet) {
+                this._goToLocation(featureSet, true);
+            }));
         },
         _superNeighborhoodsSearch: function (fn, val, text) {
             var qt = new QueryTask(config.superNeighborhoodService);
@@ -281,7 +298,9 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             q.where = "SNBNAME ='" + val + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
-            qt.execute(q, lang.hitch(this, this._goToLocation));
+            qt.execute(q, lang.hitch(this, function (featureSet) {
+                this._goToLocation(featureSet, true);           
+            }));
         },
         _projectSearch: function (fn, val, text) {
             var url = window.app.shortlist.activeLayer.url + "/query";
@@ -290,7 +309,9 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             q.where = config.shortlistDisplayField + "='" + val + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
-            qt.execute(q, lang.hitch(this, this._goToLocation));
+            qt.execute(q, lang.hitch(this, function (featureSet) {
+                this._goToLocation(featureSet, false);
+            }));
         },
         _findAddress: function (fn, magicKey, text) {
             $.get(
