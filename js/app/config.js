@@ -17,38 +17,31 @@
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
-                label: "CIP Drainage Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Thumbs_Up_Lighter.png"
+                label: "CIP Drainage Projects"
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
-                label: "CIP Streets Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Thumbs_Up_Lighter.png"
+                label: "CIP Streets Projects"
             },
             {
                  url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
-                 label: "CIP Water Projects",
-                 LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Blue_Water_Drop_Lighter.png"
+                 label: "CIP Water Projects"
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
-                label: "CIP Wastewater Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Blue_Water_Drop_Lighter.png"
+                label: "CIP Wastewater Projects"
             },            
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
-                label: "Zip Codes",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Zip_Codes.png"
+                label: "Zip Codes"
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
-                label: "Super Neighborhood",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Super_Neighborhood.png"
+                label: "Super Neighborhood"
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-                label: "City Council Districts",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Council_District.png"
+                label: "City Council Districts"
             }
             ],
             checked : true
@@ -60,38 +53,31 @@
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
-                label: "CIP Drainage Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Thumbs_Up_Lighter.png"
+                label: "CIP Drainage Projects"
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
-                label: "CIP Streets Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Thumbs_Up_Lighter.png"
+                label: "CIP Streets Projects"
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
-                label: "CIP Water Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Blue_Water_Drop_Lighter.png"
+                label: "CIP Water Projects"
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
-                label: "CIP Wastewater Projects",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Blue_Water_Drop_Lighter.png"
+                label: "CIP Wastewater Projects"
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
-                label: "Zip Codes",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Zip_Codes.png"
+                label: "Zip Codes"
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
-                label: "Super Neighborhood",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Super_Neighborhood.png"
+                label: "Super Neighborhood"
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-                label: "City Council Districts",
-                LegendURL: "http://pwegis.houstontx.gov/CIP/Legend/Council_District.png"
+                label: "City Council Districts"
             }
             ],
             checked : false

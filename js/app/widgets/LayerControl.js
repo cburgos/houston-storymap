@@ -42,14 +42,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     "autocomplete": "off"                    
                 }, label, "first");
 
-                //var span = domConstruct.create("span", {
-                //    innerHTML: "&nbsp; - "
-                //}, input, "after");
-
-                var img = domConstruct.create("img", {
-                    "src": refLayer.LegendURL
-                }, input, "after");
-
                 //Create layer and add to map
                 var layer = new FeatureLayer(refLayer.url, {
                     visible:false
