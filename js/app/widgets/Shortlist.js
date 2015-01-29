@@ -43,7 +43,9 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var aTag = domConstruct.create("a", {
                     innerHTML: title,
                     "role": "tab",
-                    "data-toggle":"tab"
+                    "data-toggle": "tab",
+                    "style": "font-size:12px;"
+
                 }, li);
 
                 if (operationalLayer.visibility) {
