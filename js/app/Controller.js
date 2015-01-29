@@ -59,6 +59,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.toggleProjectsButton) {
                 domConstruct.destroy(this.toggleProjectsButton);
             }
+            if (this.infoButton) {
+                domConstruct.destroy(this.infoButton);
+            }
             if (this.layerControl) {
                 this.layerControl.destroy();
             }
@@ -153,7 +156,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }, dataLayerButton, "last");
 
                     on(dataLayerButton, "click", lang.hitch(this, function (event) {
-                        $('#layerControlModal').modal('show');                        
+                        $('#layerControlModal').modal('toggle');                        
                         
                     }));
                     this.dataLayerButton = dataLayerButton;
@@ -196,6 +199,21 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }));
                     this.toggleProjectsButton = toggleProjectsButton;
 
+                    //InfoButton
+                    var infoButton = domConstruct.create("div", {
+                        "class": "infoButton",
+                        "title": "More Information"
+                    }, toggleProjectsButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-question-sign",
+                        "aria-hidden": true
+                    }, infoButton, "last");
+
+                    on(infoButton, "click",  function (event) {
+                        $("#splash").modal("toggle");
+                    });
+                    this.infoButton = infoButton;
+
 
                     //Basemap Toggle
                     var basemapToggle = new BasemapToggle({
@@ -203,7 +221,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         map: this.map,
                         visible: true,
                         basemap: "hybrid"
-                    }, domConstruct.create("div", {}, toggleProjectsButton, "after"));
+                    }, domConstruct.create("div", {}, infoButton, "after"));
                     basemapToggle.startup();
                     this.basemapToggle = basemapToggle;
 

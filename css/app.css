@@ -158,6 +158,28 @@ padding-top: 15px;
 .toggleProjectsButton span {
     vertical-align:middle;  
 }
+.infoButton {
+    position: relative;
+	left: 15px;
+    z-index:5;
+    width:32px;
+    height:32px;
+    background-color:white;
+    border:1px solid #CCC;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+    text-align:center;
+    top:85px;
+    cursor:pointer;  
+}
+.infoButton:hover {
+    background-color:#EEE;
+}
+.infoButton span {
+    vertical-align:middle;  
+}
 #splash {
     text-align:center;
 }
