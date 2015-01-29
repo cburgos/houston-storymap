@@ -161,7 +161,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                             text: query,
                             f: "json",
                             dataType: "json",
-                            maxLocations: 6
+                            maxLocations: 6,
+                            Country:"USA"
                         };                            
                     },
                     preProcess: function (data) {
