@@ -144,11 +144,12 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     //Data Layer Button
                     var dataLayerButton = domConstruct.create("div", {
-                        "class": "DataLayer",
+                        "class": "dataLayer",
                         "title": "Data Layer"
-                    }, homeBtn, "after");
-                    var DataImg = domConstruct.create("img", {
-                        src: "images/DataLayer.png"
+                    }, locateBtn, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-list",
+                        "aria-hidden": true
                     }, dataLayerButton, "last");
 
                     on(dataLayerButton, "click", lang.hitch(this, function (event) {
@@ -164,7 +165,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         "title": "Show / Hide Projects"
                     }, dataLayerButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-wrench",
+                        "class": "glyphicon glyphicon-indent-right",
                         "aria-hidden":true
                     }, toggleProjectsButton, "last");
 
@@ -202,7 +203,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         map: this.map,
                         visible: true,
                         basemap: "hybrid"
-                    }, domConstruct.create("div", {}, locateBtn, "after"));
+                    }, domConstruct.create("div", {}, toggleProjectsButton, "after"));
                     basemapToggle.startup();
                     this.basemapToggle = basemapToggle;
 
