@@ -178,20 +178,20 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                             //Full size map
                             $(".main-side-container").css("visibility", "hidden");
                             $(".main-side-container").css("position", "absolute");
-                            $(".main-side-container").removeClass("col-lg-4");
+                            $(".main-side-container").removeClass("col-xs-4");
 
                             $(".main-map-container").css("position", "absolute");
-                            $(".main-map-container").removeClass("col-lg-8");
-                            $(".main-map-container").addClass("col-lg-12");
+                            $(".main-map-container").removeClass("col-xs-8");
+                            $(".main-map-container").addClass("col-xs-12");
                         } else {
                             //non full size map
                             $(".main-side-container").css("visibility", "visible");
                             $(".main-side-container").css("position", "");
-                            $(".main-side-container").addClass("col-lg-4");
+                            $(".main-side-container").addClass("col-xs-4");
 
                             $(".main-map-container").css("position", "");
-                            $(".main-map-container").removeClass("col-lg-12");
-                            $(".main-map-container").addClass("col-lg-8");
+                            $(".main-map-container").removeClass("col-xs-12");
+                            $(".main-map-container").addClass("col-xs-8");
                         }
                         this.map.resize();
                         this.map.reposition();                        

@@ -59,28 +59,19 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4 main-side-container">
-                <div class="panel-group" id="accordion">
-                    <div id="projectInfo" class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Project Info</a>
-                            </h4>
-                        </div>
-                        <div style="height: auto;" data-dojo-dataid="pid3" id="collapseOne" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <div id="shortlist"></div>
-                            </div>
-                        </div>
+            <div class="col-xs-4 main-side-container">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="shortlist"></div>
                     </div>
-                </div>
+                </div>                
             </div>  
-            <div class="col-lg-8 main-map-container">
+            <div class="col-xs-8 main-map-container">
                 <div id="mapDiv">
                     <div id="SearchControl"></div>
 
 
-                        <div id="layerControlModal" class="modal ">
+                    <div id="layerControlModal" class="modal ">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -88,29 +79,29 @@
                                     <h4 class="modal-title">Data Layers</h4>
                                 </div>
                                 <div class="modal-body embed-responsive-item">
-                                     <div id="layerControl"></div>  
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div>                  
-
-                    </div>   
-                    <div id="splash" class="modal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">                                    
-                                    <h4 class="modal-title">ReBuilding Houston</h4>
-                                </div>
-                                <div class="modal-body embed-responsive-item">
-                                    <iframe src="//player.vimeo.com/video/106973057" width="500" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                                </div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                                    <div id="layerControl"></div>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                     </div>
+
                 </div>
+                <div id="splash" class="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">ReBuilding Houston</h4>
+                            </div>
+                            <div class="modal-body embed-responsive-item">
+                                <iframe src="//player.vimeo.com/video/106973057" width="500" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div>
+            </div>
             </div>
         </div>        
     </div>
