@@ -12,7 +12,7 @@
     "application/widgets/LayerControl",
     "application/widgets/SearchControl",
     "application/config",
-    "esri/dijit/BasemapToggle",
+    "esri/dijit/BasemapGallery",
     "esri/geometry/Point",
     "esri/geometry/webMercatorUtils",
     "esri/config",
@@ -21,7 +21,7 @@
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, esriConfig, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
+function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapGallery, Point, webMercatorUtils, esriConfig, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
         shortlist: null,
@@ -34,6 +34,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
         init: function () {
             //Init splash
             $("#splash").modal("show");
+
+            $('#basemapModal').modal({ "show": false, backdrop: false });
+            $("#basemapModal").draggable({ handle: ".modal-header" });
 
             $('#layerControlModal').modal({ "show" : false, backdrop : false });
             $("#layerControlModal").draggable({ handle: ".modal-header" });
@@ -49,8 +52,11 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.shortlist) {
                 this.shortlist.destroy();
             }
-            if (this.basemapToggle) {
-                this.basemapToggle.destroy();
+            if (this.basemapButton) {
+                domConstruct.destroy(this.basemapButton);
+            }
+            if (this.basemapGallery) {
+                this.basemapGallery.destroy();
             }
             if (this.locateBtn) {
                 domConstruct.destroy(this.locateBtn.id);
@@ -254,16 +260,28 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     });
                     this.infoButton = infoButton;
 
+                    //basemap toggle
+                    var basemapButton = domConstruct.create("div", {
+                        "class": "infoButton",
+                        "title": "Toggle Basemaps"
+                    }, infoButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-th-large",
+                        "aria-hidden": true
+                    }, basemapButton, "last");
 
-                    //Basemap Toggle
-                    var basemapToggle = new BasemapToggle({
-                        theme: "basemapToggle",
-                        map: this.map,
-                        visible: true,
-                        basemap: "hybrid"
-                    }, domConstruct.create("div", {}, infoButton, "after"));
-                    basemapToggle.startup();
-                    this.basemapToggle = basemapToggle;
+                    on(basemapButton, "click", function (event) {
+                        $("#basemapModal").modal("toggle");
+                    });
+                    this.basemapButton = basemapButton;
+
+
+                    this.basemapGallery = new BasemapGallery({
+                        showArcGISBasemaps: true,
+                        map: this.map
+                    }, domConstruct.create("div", {}, dom.byId("basemapGallery"), "after"));
+
+                    this.basemapGallery.startup();
 
                     //Fix for basemaps so that togglebasemaps dijit will work
                     var basemapHash = {
