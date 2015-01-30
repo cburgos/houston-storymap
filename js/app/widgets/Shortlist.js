@@ -61,7 +61,10 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     this.activeLayer = operationalLayer.layerObject;
                     array.forEach(this.operationalLayers, function (opLayer) {
                         opLayer.layerObject.setVisibility(!opLayer.layerObject.visible);
-                    });                    
+                    });
+                    if (this.map.infoWindow.isShowing) {
+                        this.map.infoWindow.hide();
+                    }
                     this.updateList();
                 }));
                 //Add widgetNode property to operationalLayer
