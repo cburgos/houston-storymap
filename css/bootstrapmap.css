@@ -130,7 +130,7 @@
 
 /* Content Pane */
 .esriPopup .contentPane, .esriPopup.light .contentPane, .esriPopup.dark .contentPane {
-  max-height: 300px;
+  max-height: 350px;
   padding: 10px 10px 0 10px;
   border-top: 1px solid #ebebeb;
 }
