@@ -250,9 +250,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         "class": "infoButton",
                         "title": "More Information"
                     }, allConstructionButton, "after");
-                    domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-question-sign",
-                        "aria-hidden": true
+                    domConstruct.create("i", {
+                        "class": "fa fa-question",
+                        "style":"font-size:24px"
                     }, infoButton, "last");
 
                     on(infoButton, "click",  function (event) {
