@@ -116,11 +116,13 @@
 }
 .esriPopup.light .titleButton.next, .esriPopup.dark .titleButton.next {
   right: 40px;
+  
 }
 
 .esriPopup.light .titleButton.next, .esriPopup.dark .titleButton.next, 
 .esriPopup.light .titleButton.prev, .esriPopup.dark .titleButton.prev {
   color: #AAAAAA;
+  top:27px;
 }
 
 .esriPopup.light .titleButton.next:hover, .esriPopup.dark .titleButton.next:hover,
