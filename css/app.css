@@ -189,3 +189,6 @@ padding-top: 15px;
     top:50px;
 
 }
+.esriPopup.light .titleButton.close {
+right:0px;
+}

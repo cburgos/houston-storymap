@@ -88,6 +88,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     this.map = result.map;
                     this.map.enableScrollWheelZoom();
 
+                    //customize infowindow
+                    this.map.infoWindow.titleInBody = false;
+
                     this._createShortlist(result);
 
                     //slider titles

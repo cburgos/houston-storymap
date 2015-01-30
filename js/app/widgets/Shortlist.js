@@ -56,7 +56,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }
                 domConstruct.place(li, tabContainer, "last");
                 
-                //TODO: Handle Click of tab
+                // Handle Click of tab
                 $(aTag).on('shown.bs.tab', lang.hitch(this, function (e) {
                     this.activeLayer = operationalLayer.layerObject;
                     array.forEach(this.operationalLayers, function (opLayer) {
@@ -117,9 +117,13 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             }));            
         },
         selectGraphic: function (graphic, evt) {
+            //customize infowindow
+            this.map.infoWindow.titleInBody = false;
+
             var title = graphic.attributes[config.shortlistDisplayField];
             
             //Open infowindow
+            this.map.infoWindow.setTitle(title);
             this.map.infoWindow.setContent(graphic.getContent());
             this.map.infoWindow.show(graphic.geometry);
             //Zoom to graphic
