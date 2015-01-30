@@ -17,12 +17,16 @@
     "esri/geometry/webMercatorUtils",
     "esri/graphic",
     "esri/layers/GraphicsLayer",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol) {
+function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
-        shortlist : null,
+        shortlist: null,
+        layerControl: null,
+        searchControl: null,
+        allConstructionLayer : null,
         startup: function () {
             this.init();
         },
@@ -59,6 +63,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.toggleProjectsButton) {
                 domConstruct.destroy(this.toggleProjectsButton);
             }
+            if (this.allConstructionButton) {
+                domConstruct.destroy(this.allConstructionButton);
+            }
             if (this.infoButton) {
                 domConstruct.destroy(this.infoButton);
             }
@@ -70,7 +77,10 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             }
              if (this.layerControl) {
                 this.layerControl.destroy();
-            }
+             }
+             if (this.allConstructionLayer) {
+                 this.allConstructionLayer.destroy();
+             }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -202,11 +212,37 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }));
                     this.toggleProjectsButton = toggleProjectsButton;
 
+                    //all construction Button
+                    var allConstructionButton = domConstruct.create("div", {
+                        "class": "infoButton",
+                        "title": "All Construction: Look Back Look Forward"
+                    }, toggleProjectsButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-fullscreen",
+                        "aria-hidden": true
+                    }, allConstructionButton, "last");
+
+                    on(allConstructionButton, "click", lang.hitch(this, function (event) {
+                        //TODO: Toggle Layer
+                        if (this.allConstructionLayer) {
+                            this.allConstructionLayer.setVisibility(!this.allConstructionLayer.visible);
+                        } else {
+                            //create layer and add to map
+                            this.allConstructionLayer = new ArcGISDynamicMapServiceLayer(config.allConstructionLayer, {
+
+                            });
+                            this.map.addLayer(this.allConstructionLayer, 1);                            
+                        }
+                    }));
+                    this.allConstructionButton = allConstructionButton;
+
+
+
                     //InfoButton
                     var infoButton = domConstruct.create("div", {
                         "class": "infoButton",
                         "title": "More Information"
-                    }, toggleProjectsButton, "after");
+                    }, allConstructionButton, "after");
                     domConstruct.create("span", {
                         "class": "glyphicon glyphicon-question-sign",
                         "aria-hidden": true

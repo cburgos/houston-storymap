@@ -4,6 +4,7 @@
     referenceLayers: [
 
     ],
+    allConstructionLayer: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/CIPprojects/MapServer",
     pageTitle: "",
     shortlistDisplayField: "PRO_SCOPE",
     imageField: "PROJ_IMAGE",
