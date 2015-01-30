@@ -168,7 +168,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                         "title": "Show / Hide Projects"
                     }, dataLayerButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-indent-right",
+                        "class": "glyphicon glyphicon-resize-horizontal",
                         "aria-hidden":true
                     }, toggleProjectsButton, "last");
 
