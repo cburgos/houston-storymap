@@ -93,27 +93,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));
                 }));
                 $(".thumbContainer").html(row);
-
-                //Update streetViewhandler
-                if (this.streetViewHandler) {
-                    this.streetViewHandler.remove();
-                    this.streetViewHandler = null;
-                }
-                if (this._streetViewHandler) {
-                    this._streetViewHandler.remove();
-                    this._streetViewHandler = null;
-                }
-                if (this.activeLayer.name.toUpperCase().indexOf("FUTURE") >=0) {
-                    this.streetViewHandler == on(this.map.infoWindow, "show", lang.hitch(this, function () {
-                        var graphic = this.map.infoWindow.getSelectedFeature();
-                        var x = graphic.attributes.POINT_X;
-                        var y = graphic.attributes.POINT_Y;
-                        var gStreeUrl = "//maps.google.com/maps?q=" + y + ", " + x + "&z=17&t=k&hl=en";
-                        //this._streetViewHandler = on($(".esriPopupMediaImage"), "click", function () {
-                            //window.open(gStreeUrl);
-                        //});
-                    }));
-                }
             }));            
         },
         selectGraphic: function (graphic, evt) {

@@ -15,12 +15,13 @@
     "esri/dijit/BasemapToggle",
     "esri/geometry/Point",
     "esri/geometry/webMercatorUtils",
+    "esri/config",
     "esri/graphic",
     "esri/layers/GraphicsLayer",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
+function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, esriConfig, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
         shortlist: null,
@@ -290,7 +291,24 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     //Search Control
                     this.initSearchControl();
 
-
+                    //Street View 
+                    on(this.map.infoWindow, "show", lang.hitch(this, function (event) {
+                        var g = this.map.infoWindow.getSelectedFeature();
+                        if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
+                            $(".esriPopupMediaImage").css("cursor", "pointer");
+                            var handler = on($(".esriPopupMediaImage"), "click", lang.hitch(this, function () {                                
+                                var x = g.attributes.POINT_X;
+                                var y = g.attributes.POINT_Y;
+                                var latLong = y + "," + x;
+                                var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
+                                window.open(gStreetUrl);
+                            }));
+                            var handler2 = on(this.map.infoWindow, "hide", lang.hitch(this, function (event) {
+                                handler.remove();
+                                handler2.remove();
+                            }));
+                        }
+                    }));
                 }
             }));
         },
