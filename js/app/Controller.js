@@ -79,7 +79,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                 this.layerControl.destroy();
              }
              if (this.allConstructionLayer) {
-                 this.allConstructionLayer.destroy();
+                 this.allConstructionLayer = null;
              }
         },
         _init: function (selectedWebmap) {
