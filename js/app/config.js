@@ -19,31 +19,30 @@
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
-                label: "CIP Drainage Projects"
+                label: "CIP Drainage Projects",
+                minScale: 37000,
+                visible : true
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
-                label: "CIP Streets Projects"
-            },
-            {
-                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
-                 label: "CIP Water Projects"
-            },
-            {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
-                label: "CIP Wastewater Projects"
-            },            
+                label: "CIP Streets Projects",
+                minScale: 37000,
+                visible: true
+            },        
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
-                label: "Zip Codes"
+                label: "Zip Codes",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
-                label: "Super Neighborhood"
+                label: "Super Neighborhood",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-                label: "City Council Districts"
+                label: "City Council Districts",
+                visible: false
             }
             ],
             checked : true
@@ -54,32 +53,31 @@
             webmapId: "42483ddf05bc43f28aee27b449da0a9b",
             referenceLayers: [
             {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
-                label: "CIP Drainage Projects"
-            },
-            {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
-                label: "CIP Streets Projects"
-            },
-            {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
-                label: "CIP Water Projects"
+                label: "CIP Water Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
-                label: "CIP Wastewater Projects"
+                label: "CIP Wastewater Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
-                label: "Zip Codes"
+                label: "Zip Codes",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
-                label: "Super Neighborhood"
+                label: "Super Neighborhood",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-                label: "City Council Districts"
+                label: "City Council Districts",
+                visible: false
             }
             ],
             checked : false
@@ -90,31 +88,42 @@
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
-                label: "CIP Drainage Projects"
+                label: "CIP Drainage Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/STREET_REF/FeatureServer/0",
-                label: "CIP Streets Projects"
+                label: "CIP Streets Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
-                label: "CIP Water Projects"
+                label: "CIP Water Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
-                label: "CIP Wastewater Projects"
+                label: "CIP Wastewater Projects",
+                minScale: 37000,
+                visible: true
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
-                label: "Zip Codes"
+                label: "Zip Codes",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
-                label: "Super Neighborhood"
+                label: "Super Neighborhood",
+                visible: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-                label: "City Council Districts"
+                label: "City Council Districts",
+                visible: false
             }
             ],
             checked: false

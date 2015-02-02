@@ -44,8 +44,14 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
 
                 //Create layer and add to map
                 var layer = new FeatureLayer(refLayer.url, {
-                    visible:false
+                    visible: refLayer.visible
                 });
+                if (refLayer.minScale) {
+                    layer.setMinScale(refLayer.minScale);
+                }
+                if (refLayer.maxScale) {
+                    layer.setMinScale(refLayer.maxScale);
+                }
                 this.map.addLayer(layer, i);
                 this.layers.push(layer);
                 // Handle click
