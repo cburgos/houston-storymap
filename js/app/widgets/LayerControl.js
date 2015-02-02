@@ -39,7 +39,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }, li, "last");
                 var input = domConstruct.create("input", {
                     "type": "checkbox",
-                    "autocomplete": "off"                    
+                    "autocomplete": "off",
+                    "checked" : refLayer.visible                    
                 }, label, "first");
 
                 //Create layer and add to map
