@@ -32,7 +32,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         cityCouncilDistricts: null,
         searchTypes: {
             "ADDRESS": "ADDRESS",
-            "PROJECT": "PROJECT",
+            "PROJECT_NAME": "PROJECT_NAME",
             "SUPER_NEIGHBORHOOD": "SUPER_NEIGHBORHOOD",
             "CITY_COUNCIL_DISTRICTS": "CITY_COUNCIL_DISTRICTS",
         },
@@ -142,7 +142,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
 
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._addressTypeAhead();
-            } else if (this.searchType === this.searchTypes.PROJECT) {
+            } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectTypeAhead();
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
                 this._cityCouncilDistrictsTypeAhead();
@@ -272,7 +272,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         search: function () {
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._findAddress(null, null, this.searchInput.value);
-            } else if (this.searchType === this.searchTypes.PROJECT) {
+            } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectSearch(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
                 this._cityCouncilDistrictSearch(null, null, this.searchInput.value);
