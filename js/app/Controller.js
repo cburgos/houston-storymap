@@ -106,6 +106,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                 if (result.map) {
                     this.map = result.map;
                     this.map.enableScrollWheelZoom();
+                    this.map.hideZoomSlider();
 
                     //customize infowindow
                     this.map.infoWindow.titleInBody = false;
@@ -156,17 +157,36 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     this._createShortlist(result);
 
-                    //slider titles
-                    $(".esriSimpleSliderIncrementButton").prop("title", "Zoom In");
-                    $(".esriSimpleSliderDecrementButton").prop("title", "Zoom Out");
+                    //Zoom In
+                    var zoomInBtn = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Zoom In"
+                    }, dom.byId("mapDiv_zoom_slider"), "after");
+                    var zoomInImg = domConstruct.create("span", {
+                        innerHTML : "+"
+                    }, zoomInBtn, "last");
+                    on(zoomInBtn, "click", lang.hitch(this, function () {
+                        this.map.setLevel(this.map.getLevel() + 1);
+                    }));
 
+                    //Zoom Out
+                    var zoomOutBtn = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Zoom Out"
+                    }, zoomInBtn, "after");
+                    var zoomOutImg = domConstruct.create("span", {
+                        innerHTML: "-"
+                    }, zoomOutBtn, "last");
+                    on(zoomOutBtn, "click", lang.hitch(this, function () {
+                        this.map.setLevel(this.map.getLevel() - 1);
+                    }));
                   
                     //Home Button
                     var homeExtent = result.map.extent;
                     var homeBtn = domConstruct.create("div", {
-                        "class": "homeButton",
+                        "class": "mapButton",
                         "title": "Default Extent"
-                    }, dom.byId("mapDiv_zoom_slider"), "after");
+                    }, zoomOutBtn, "after");
                     var homeImg = domConstruct.create("img", {
                         src: "images/ZoomHome.png"
                     }, homeBtn, "last");
@@ -178,7 +198,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //Locate Button
                     var locateBtn = domConstruct.create("div", {
-                        "class": "locateButton",
+                        "class": "mapButton",
                         "title" : "My Location"
                     }, homeBtn, "after");
                     var locateImg = domConstruct.create("img", {
@@ -213,7 +233,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //Data Layer Button
                     var dataLayerButton = domConstruct.create("div", {
-                        "class": "dataLayer",
+                        "class": "mapButton",
                         "title": "Data Layer"
                     }, locateBtn, "after");
                     domConstruct.create("span", {
@@ -228,9 +248,8 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                     this.dataLayerButton = dataLayerButton;
 
                     //Toggle Projects button
-                    //Data Layer Button
                     var toggleProjectsButton = domConstruct.create("div", {
-                        "class": "toggleProjectsButton",
+                        "class": "mapButton",
                         "title": "Show / Hide Projects"
                     }, dataLayerButton, "after");
                     domConstruct.create("span", {
@@ -267,7 +286,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //all construction Button
                     var allConstructionButton = domConstruct.create("div", {
-                        "class": "infoButton",
+                        "class": "mapButton",
                         "title": "All Construction: Look Back Look Forward"
                     }, toggleProjectsButton, "after");
                     domConstruct.create("span", {
@@ -294,7 +313,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //InfoButton
                     var infoButton = domConstruct.create("div", {
-                        "class": "infoButton",
+                        "class": "mapButton",
                         "title": "More Information"
                     }, allConstructionButton, "after");
                     domConstruct.create("i", {
@@ -309,7 +328,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //basemap toggle
                     var basemapButton = domConstruct.create("div", {
-                        "class": "infoButton",
+                        "class": "mapButton",
                         "title": "Toggle Basemaps"
                     }, infoButton, "after");
                     domConstruct.create("span", {
