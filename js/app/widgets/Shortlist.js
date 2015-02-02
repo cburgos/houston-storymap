@@ -55,13 +55,17 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     $(li).tab();
                 }
                 domConstruct.place(li, tabContainer, "last");
-                
+
                 // Handle Click of tab
                 $(aTag).on('shown.bs.tab', lang.hitch(this, function (e) {
                     this.activeLayer = operationalLayer.layerObject;
                     array.forEach(this.operationalLayers, function (opLayer) {
-                        opLayer.layerObject.setVisibility(!opLayer.layerObject.visible);
+                        if (opLayer.layerObject.visible === true) {
+                            opLayer.layerObject.setVisibility(false);
+                        } 
                     });
+                    this.activeLayer.show();
+
                     if (this.map.infoWindow.isShowing) {
                         this.map.infoWindow.hide();
                     }
@@ -69,6 +73,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }));
                 //Add widgetNode property to operationalLayer
                 operationalLayer.widgetNode = li;
+
             }));
         },
         updateList: function () {
@@ -93,23 +98,16 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                         "style": "font-size:10px;"
                     }, img, "after");
                     //Col click
-                    on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));
+                    on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));        
                 }));
                 $(".thumbContainer").html(row);
             }));            
         },
-        selectGraphic: function (graphic, evt) {
-            //customize infowindow
-            this.map.infoWindow.titleInBody = false;
-
-            var title = graphic.attributes[config.shortlistDisplayField];
-            
-            //Open infowindow
-            this.map.infoWindow.setTitle(title);
-            this.map.infoWindow.setContent(graphic.getContent());
+        selectGraphic: function (graphic, evt) {            
+            this.map.infoWindow.setFeatures([graphic]);
             this.map.infoWindow.show(graphic.geometry);
             //Zoom to graphic
-            this.map.centerAndZoom(graphic.geometry, 15); // Will only work for points
+            this.map.centerAndZoom(graphic.geometry, 15); // Will only work for points*/
         }
 
     });// return

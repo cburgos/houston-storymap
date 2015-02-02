@@ -196,3 +196,12 @@ padding-top: 15px;
 .esriPopup.light .titleButton.close {
 right:0px;
 }
+.esriPopup .contentPane {
+
+    line-height: 2em;
+}
+.esriPopupMediaImage {
+    max-width: 200px;
+    max-height: 150px;
+    border-style: none;
+}

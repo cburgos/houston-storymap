@@ -2,6 +2,7 @@
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/aspect",
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom",
@@ -17,11 +18,12 @@
     "esri/geometry/webMercatorUtils",
     "esri/config",
     "esri/graphic",
+    "esri/InfoTemplate",
     "esri/layers/GraphicsLayer",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapGallery, Point, webMercatorUtils, esriConfig, Graphic, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
+function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapGallery, Point, webMercatorUtils, esriConfig, Graphic, InfoTemplate, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
         shortlist: null,
@@ -107,6 +109,50 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     //customize infowindow
                     this.map.infoWindow.titleInBody = false;
+                    aspect.before(this.map.infoWindow, "select", lang.hitch(this, function () {
+                        this.map.infoWindow.hide();
+                        array.forEach(this.map.infoWindow.features, function (g) {
+                            var infoTemplate = new InfoTemplate();
+                            var titleString = config.infoTemplateTitleField;
+                            var contentString = "";
+
+                            if (g.attributes.CIP_NO) {
+                                contentString = contentString + " WBS : " + g.attributes.CIP_NO;
+                            }
+                            if (g.attributes.COST) {
+                                contentString = contentString + " <br> Cost : " + g.attributes.COST;
+                            }
+                            if (g.attributes.FCON_START) {
+                                contentString = contentString + " <br> Construction Start : " + g.attributes.FCON_START;
+                            }
+                            if (g.attributes.COMPLETED) {
+                                contentString = contentString + " <br> Contstruction End : " + g.attributes.COMPLETED;
+                            }
+                            if (g.attributes.PROJ_DOC) {
+                                contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
+                            }
+                            if (g.attributes.PROJ_DOC2) {
+                                contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC2 + "'>Project Summary</a>";
+                            }
+                            //Street View Link
+                            if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
+                                var x = g.attributes.POINT_X;
+                                var y = g.attributes.POINT_Y;
+                                var latLong = y + "," + x;
+                                var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
+                                contentString = contentString + " <br> <a href='" + gStreetUrl + "' target='_blank'>Street View</a>";
+                            }
+                            //Image
+                            if (g.attributes.PROJ_IMAGE) {
+                                contentString = contentString + " <br> <img class='esriPopupMediaImage' src='" + g.attributes.PROJ_IMAGE + "' />";
+                            }
+                            infoTemplate.setTitle(titleString);
+                            infoTemplate.setContent(contentString);
+
+                            g.setInfoTemplate(infoTemplate);
+                        });
+                        this.map.infoWindow.show(this.map.infoWindow.location);
+                    }));
 
                     this._createShortlist(result);
 
@@ -309,24 +355,6 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     //Search Control
                     this.initSearchControl();
 
-                    //Street View 
-                    on(this.map.infoWindow, "show", lang.hitch(this, function (event) {
-                        var g = this.map.infoWindow.getSelectedFeature();
-                        if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
-                            $(".esriPopupMediaImage").css("cursor", "pointer");
-                            var handler = on($(".esriPopupMediaImage"), "click", lang.hitch(this, function () {                                
-                                var x = g.attributes.POINT_X;
-                                var y = g.attributes.POINT_Y;
-                                var latLong = y + "," + x;
-                                var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
-                                window.open(gStreetUrl);
-                            }));
-                            var handler2 = on(this.map.infoWindow, "hide", lang.hitch(this, function (event) {
-                                handler.remove();
-                                handler2.remove();
-                            }));
-                        }
-                    }));
                 }
             }));
         },

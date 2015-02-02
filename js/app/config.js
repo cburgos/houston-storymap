@@ -7,6 +7,7 @@
     allConstructionLayer: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/CIPprojects/MapServer",
     pageTitle: "",
     shortlistDisplayField: "PRO_SCOPE",
+    infoTemplateTitleField: "${PRO_SCOPE}",
     imageField: "PROJ_IMAGE",
     locatorUrl: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
     cityCouncilDistrictsService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
