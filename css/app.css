@@ -46,8 +46,8 @@ text-align:right;
 #SearchControl {
 position: absolute;
 z-index: 5;
-padding-left: 50px;
-padding-top: 15px;
+padding-left: 80px;
+padding-top: 10px;
 
 }
 
@@ -88,7 +88,7 @@ padding-top: 15px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
     text-align:center;
-    top:85px;
+    top:10px;
     cursor:pointer;
     font-size:25px;  
 }

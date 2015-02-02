@@ -118,16 +118,16 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             var contentString = "";
 
                             if (g.attributes.CIP_NO) {
-                                contentString = contentString + " WBS : " + g.attributes.CIP_NO;
+                                contentString = contentString + " WBS # : " + g.attributes.CIP_NO;
                             }
                             if (g.attributes.COST) {
-                                contentString = contentString + " <br> Cost : " + g.attributes.COST;
+                                contentString = contentString + " <br> Cost Estimate : " + g.attributes.COST;
                             }
                             if (g.attributes.FCON_START) {
                                 contentString = contentString + " <br> Construction Start : " + g.attributes.FCON_START;
                             }
                             if (g.attributes.COMPLETED) {
-                                contentString = contentString + " <br> Contstruction End : " + g.attributes.COMPLETED;
+                                contentString = contentString + " <br> Construction End : " + g.attributes.COMPLETED;
                             }
                             if (g.attributes.PROJ_DOC) {
                                 contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
