@@ -152,7 +152,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                             g.setInfoTemplate(infoTemplate);
                         });
-                        this.map.infoWindow.show(this.map.infoWindow.location);
+                        this.map.infoWindow.show(this.map.infoWindow.features[0]);
                     }));
 
                     this._createShortlist(result);
