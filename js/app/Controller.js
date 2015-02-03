@@ -302,8 +302,6 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             //create layer and add to map
                             this.allConstructionLayer = new ArcGISDynamicMapServiceLayer(config.allConstructionLayer, {
                             });
-                            this.allConstructionLayer.setMinScale(145000);
-                            this.allConstructionLayer.setMaxScale(72000);
                             this.map.addLayer(this.allConstructionLayer, 1);                            
                         }
                     }));
