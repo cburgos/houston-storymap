@@ -110,6 +110,8 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
 
                     //customize infowindow
                     this.map.infoWindow.titleInBody = false;
+                    this.map.infoWindow.anchor = "left";
+
                     aspect.before(this.map.infoWindow, "select", lang.hitch(this, function () {
                         this.map.infoWindow.hide();
                         array.forEach(this.map.infoWindow.features, function (g) {
