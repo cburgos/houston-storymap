@@ -285,8 +285,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         },
         _cityCouncilDistrictSearch: function (fn, val, text) {
             var qt = new QueryTask(config.cityCouncilDistrictsService);
-            var q = new Query();
-            q.where = "DISTRICT ='" + val + "'";
+            var q = new Query();           
+            q.where = "upper(DISTRICT) ='" + text.toUpperCase() + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
@@ -296,7 +296,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         _superNeighborhoodsSearch: function (fn, val, text) {
             var qt = new QueryTask(config.superNeighborhoodService);
             var q = new Query();
-            q.where = "SNBNAME ='" + val + "'";
+            q.where = "upper(SNBNAME) ='" + text.toUpperCase() + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
