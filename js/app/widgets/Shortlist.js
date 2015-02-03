@@ -79,7 +79,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         updateList: function () {
             this.activeLayer.on("update-end", lang.hitch(this, function (event) {
                 var row = domConstruct.create("div", {
-                    "class": "row"
                 });
                 $(".thumbContainer").empty();
                 array.forEach(this.activeLayer.graphics, lang.hitch(this, function (graphic) {
