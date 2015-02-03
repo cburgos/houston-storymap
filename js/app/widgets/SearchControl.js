@@ -245,9 +245,10 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var center;
                 if (feat.geometry.type === "polygon") {
                     if (showBoundary === true) {
-                        this.showBoundary(feat.geometry);
-                    }
-                    this.map.setExtent(feat.geometry.getExtent());
+                        console.log(feat.geometry);
+                        this.showBoundary(feat.geometry);                        
+                    }                    
+                    this.map.setExtent(feat.geometry.getExtent().expand(2));
                 } else if (feat.geometry.type === "point") {
                     center = feat.geometry;
                     this._zoomToPoint(center);

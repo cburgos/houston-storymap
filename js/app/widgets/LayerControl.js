@@ -30,19 +30,6 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             domConstruct.empty(this.layerListContainer);
 
             array.forEach(this.webmap.referenceLayers, lang.hitch(this, function (refLayer, i) {
-                var li = domConstruct.create("li", {
-                    "class": "list-group-item"
-                }, this.layerListContainer, "last");
-                var label = domConstruct.create("label", {
-                    "class": "btn btn-primary",
-                    innerHTML: "&nbsp;"+ refLayer.label
-                }, li, "last");
-                var input = domConstruct.create("input", {
-                    "type": "checkbox",
-                    "autocomplete": "off",
-                    "checked" : refLayer.visible                    
-                }, label, "first");
-
                 //Create layer and add to map
                 var layer = new FeatureLayer(refLayer.url, {
                     visible: refLayer.visible
@@ -55,10 +42,27 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 }
                 this.map.addLayer(layer, i);
                 this.layers.push(layer);
-                // Handle click
-                on(input, "click", function () {
-                    layer.setVisibility(!layer.visible);
-                });
+
+                if (refLayer.showInLayerControl === true) {
+                    var li = domConstruct.create("li", {
+                        "class": "list-group-item"
+                    }, this.layerListContainer, "last");
+                    var label = domConstruct.create("label", {
+                        "class": "btn btn-primary",
+                        innerHTML: "&nbsp;" + refLayer.label
+                    }, li, "last");
+                    var input = domConstruct.create("input", {
+                        "type": "checkbox",
+                        "autocomplete": "off",
+                        "checked": refLayer.visible,
+
+                    }, label, "first");
+
+                    // Handle click
+                    on(input, "click", function () {
+                        layer.setVisibility(!layer.visible);
+                    });
+                }                        
             }));
         },
         destroy: function () {

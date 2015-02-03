@@ -48,7 +48,11 @@ position: absolute;
 z-index: 5;
 padding-left: 80px;
 padding-top: 10px;
-
+}
+#DivHeader
+{
+    border-style: solid;
+    background-color: silver;
 }
 
 .basemapBG {

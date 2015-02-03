@@ -95,7 +95,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     }, aTag, "last");
                     var label = domConstruct.create("label", {
                         innerHTML: graphic.attributes[config.shortlistDisplayField],
-                        "style": "font-size:10px;"
+                        "style": "font-size:9px;"
                     }, img, "after");
                     //Col click
                     on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));        
