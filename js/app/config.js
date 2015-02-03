@@ -127,14 +127,14 @@
                 label: "CIP Water Projects",
                 minScale: 37000,
                 visible: true,
-                showInLayerControl: true
+                showInLayerControl: false
             },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WASTEWATER_REF/FeatureServer/0",
                 label: "CIP Wastewater Projects",
                 minScale: 37000,
                 visible: true,
-                showInLayerControl: true
+                showInLayerControl: false
             },
             {
                 url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
