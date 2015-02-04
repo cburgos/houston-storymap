@@ -9,15 +9,17 @@
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!application/widgets/templates/Shortlist.html"
+    "dojo/text!application/widgets/templates/Shortlist.html",
+    "esri/tasks/query"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Query) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         map: null,
         operationalLayers: null,
         tabListItems: null,
         activeLayer: null,
+        handler: null,
         _streetViewHandler : null, //listen for click of image
         streetViewHandler : null, //Listen for show of map infowindow
         constructor : function() {
@@ -59,6 +61,10 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 // Handle Click of tab
                 $(aTag).on('shown.bs.tab', lang.hitch(this, function (e) {
                     this.activeLayer = operationalLayer.layerObject;
+                    if (this.handler !== null) {
+                        this.handler.remove();
+                    }
+                    this.handler = on(this.activeLayer, "extent-change", lang.hitch(this, this.updateList));
                     array.forEach(this.operationalLayers, function (opLayer) {
                         if (opLayer.layerObject.visible === true) {
                             opLayer.layerObject.setVisibility(false);
@@ -77,30 +83,37 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             }));
         },
         updateList: function () {
-            this.activeLayer.on("update-end", lang.hitch(this, function (event) {
-                var row = domConstruct.create("div", {
+            var self = this;
+            this.handler = on(this.activeLayer, "update-end", lang.hitch(this, function () {                
+                var query = new Query();
+                query.geometry = this.map.extent;
+                query.outSpatialReference = this.map.spatialReference;
+                query.where = "1=1";
+
+                this.activeLayer.queryFeatures(query, function (featureSet) {
+                    var row = domConstruct.create("div", {});
+                    $(".thumbContainer").empty();
+                    array.forEach(featureSet.features, function (graphic) {
+                        //Create thumbnails
+                        var col = domConstruct.create("div", {
+                            "class": "col-xs-12 col-lg-4 thumbnail"
+                        }, row, "last");
+                        var aTag = domConstruct.create("a", {
+                        }, col, "last");
+                        var img = domConstruct.create("img", {
+                            alt: graphic.attributes[config.shortlistDisplayField],
+                            src: graphic.attributes[config.imageField]
+                        }, aTag, "last");
+                        var label = domConstruct.create("label", {
+                            innerHTML: graphic.attributes[config.shortlistDisplayField],
+                            "style": "font-size:9px;"
+                        }, img, "after");
+                        //Col click
+                        on(col, "click", lang.partial(lang.hitch(self, "selectGraphic"), graphic));
+                    });
+                    $(".thumbContainer").html(row);
                 });
-                $(".thumbContainer").empty();
-                array.forEach(this.activeLayer.graphics, lang.hitch(this, function (graphic) {
-                    //Create thumbnails
-                    var col = domConstruct.create("div", {
-                        "class": "col-xs-12 col-lg-4 thumbnail"
-                    }, row, "last");
-                    var aTag = domConstruct.create("a", {
-                    }, col, "last");
-                    var img = domConstruct.create("img", {
-                        alt: graphic.attributes[config.shortlistDisplayField],
-                        src: graphic.attributes[config.imageField]
-                    }, aTag, "last");
-                    var label = domConstruct.create("label", {
-                        innerHTML: graphic.attributes[config.shortlistDisplayField],
-                        "style": "font-size:9px;"
-                    }, img, "after");
-                    //Col click
-                    on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));        
-                }));
-                $(".thumbContainer").html(row);
-            }));            
+            }));                  
         },
         selectGraphic: function (graphic, evt) {            
             this.map.infoWindow.setFeatures([graphic]);
@@ -108,6 +121,5 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             //Zoom to graphic
             this.map.centerAndZoom(graphic.geometry, 15); // Will only work for points*/
         }
-
     });// return
 }); //define

@@ -99,7 +99,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
             var mapReq = BootstrapMap.createWebMap(selectedWebmap.webmapId, "mapDiv", {
                 mapOptions: {
                     slider: true,
-                    wrapAround180: false
+                    wrapAround180: true
                 }
             });
             mapReq.then(lang.hitch(this, function (result) {
