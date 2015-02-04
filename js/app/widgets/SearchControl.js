@@ -16,9 +16,10 @@
     "esri/tasks/locator",
     "esri/tasks/QueryTask",
     "esri/tasks/query",
-    "esri/symbols/SimpleFillSymbol"
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/PictureMarkerSymbol"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol, PictureMarkerSymbol) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -251,7 +252,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     this.map.setExtent(feat.geometry.getExtent().expand(2));
                 } else if (feat.geometry.type === "point") {
                     center = feat.geometry;
-                    this._zoomToPoint(center);
+                    this._zoomToPoint(center);                    
                 }                
             }
         },
@@ -262,6 +263,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             } else {
                 this.map.centerAt(pt);
             }
+            
         },
         showBoundary: function(geometry) {
             if (geometry.type === "polygon") {
@@ -335,6 +337,11 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             if (!loc) { return; }
             var pt = new Point(loc.feature.geometry.x, loc.feature.geometry.y, new SpatialReference(result.spatialReference.latestWkid));
             this._zoomToPoint(pt);
+
+            //Marker
+            this.map.graphics.clear();
+            var g = new Graphic(pt, new PictureMarkerSymbol("http://static.arcgis.com/images/Symbols/Basic/RedStickpin.png", 24, 24), null, null);
+            this.map.graphics.add(g);
         }
     });// return
 }); //define
