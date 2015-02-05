@@ -14,7 +14,7 @@
     superNeighborhoodService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
     webmaps : [
         {
-            label: "Streets & Drainage", 
+            label: "&nbsp;&nbsp;&nbsp;Streets & Drainage&nbsp;&nbsp;&nbsp;", 
             webmapId: "a44443cefef84817a83fb2b8b208cd77",
             referenceLayers: [
             {
@@ -32,25 +32,25 @@
                 showInLayerControl: false
             },        
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/0",
                 label: "Zip Codes",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "Super Neighborhood",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/2",
                 label: "City Council Districts",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/4",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true
@@ -60,7 +60,7 @@
 
         },
         {
-            label: "Water & Wastewater",
+            label: "&nbsp;&nbsp;&nbsp;Water & Wastewater&nbsp;&nbsp;&nbsp;",
             webmapId: "42483ddf05bc43f28aee27b449da0a9b",
             referenceLayers: [
             {
@@ -78,25 +78,25 @@
                 showInLayerControl: false
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/0",
                 label: "Zip Codes",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "Super Neighborhood",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/2",
                 label: "City Council Districts",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/4",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true
@@ -105,7 +105,9 @@
             checked : false
         },
         {
-            label: "All",
+            //label: "&nbsp;&nbsp;All&nbsp;&nbsp;",
+			//label: "<div style=width:32px>All</div>",
+			label: "All",
             webmapId: "9e41c704aae1454c803a3ebf236f692f",
             referenceLayers: [
             {
@@ -137,25 +139,25 @@
                 showInLayerControl: false
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/1",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/0",
                 label: "Zip Codes",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "Super Neighborhood",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/2",
                 label: "City Council Districts",
                 visible: false,
                 showInLayerControl: true
             },
             {
-                url: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/4",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true

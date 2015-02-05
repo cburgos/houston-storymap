@@ -37,6 +37,9 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
             //Init splash
             $("#splash").modal("show");
 
+            $('#LegendModal').modal({ "show": false, backdrop: false });
+            $("#LegendModal").draggable({ handle: ".modal-header" });
+
             $('#basemapModal').modal({ "show": false, backdrop: false });
             $("#basemapModal").draggable({ handle: ".modal-header" });
 
@@ -90,6 +93,9 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
              if (this.allConstructionLayer) {
                  this.allConstructionLayer = null;
              }
+             if (this.LegendControl) {
+                 this.LegendControl.destroy();
+             }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -119,8 +125,11 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             var titleString = config.infoTemplateTitleField;
                             var contentString = "";
 
+                            if (g.attributes.DEPARTMENT) {
+                                contentString = contentString + " Project Type : " + g.attributes.DEPARTMENT.replace("_", "");
+                            }
                             if (g.attributes.CIP_NO) {
-                                contentString = contentString + " WBS # : " + g.attributes.CIP_NO;
+                                contentString = contentString + " <br> WBS # : " + g.attributes.CIP_NO;
                             }
                             if (g.attributes.COST) {
                                 contentString = contentString + " <br> Cost Estimate : " + g.attributes.COST;
@@ -135,14 +144,15 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                                 contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
                             }
                             if (g.attributes.PROJ_DOC2) {
-                                contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC2 + "'>Project Summary</a>";
+                                contentString = contentString + "&nbsp;||&nbsp;<a target='_blank' href='" + g.attributes.PROJ_DOC2 + "'>Project Summary</a>";
                             }
                             //Street View Link
                             if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
                                 var x = g.attributes.POINT_X;
                                 var y = g.attributes.POINT_Y;
-                                var latLong = y + "," + x;
-                                var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
+                                //var latLong = y + "," + x;                                
+                                //var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
+                                var gStreetUrl = "//pwecip.houstontx.gov/cipprod/StreetView.html?Y=" + y + "&X=" + x;
                                 contentString = contentString + " <br> <a href='" + gStreetUrl + "' target='_blank'>Street View</a>";
                             }
                             //Image
@@ -309,8 +319,6 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                     }));
                     this.allConstructionButton = allConstructionButton;
 
-
-
                     //InfoButton
                     var infoButton = domConstruct.create("div", {
                         "class": "mapButton",
@@ -368,6 +376,24 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                         this.map.removeLayer(bm.layerObject);
                     }));
                     this.map.setBasemap(basemapHash[basemapTitle]);
+
+                    //Legend Button
+                    var LegendButton = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Legend"
+                    }, basemapButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-list-alt",
+                        "aria-hidden": true
+                    }, LegendButton, "last");
+
+                    on(LegendButton, "click", lang.hitch(this, function (event) {
+                        $('#LegendModal').modal('toggle');                         
+                        //$("#LegendControl").load("Legend.html");
+                        //$("#LegendControl").height(400);
+                        //$("#LegendControl").scroll();
+                    }));
+                    this.LegendButton = LegendButton;
 
                     //Layer Control
                     this._initLayerControl(selectedWebmap);
