@@ -9,15 +9,17 @@
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!application/widgets/templates/Shortlist.html"
+    "dojo/text!application/widgets/templates/Shortlist.html",
+    "esri/tasks/query"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Query) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         map: null,
         operationalLayers: null,
         tabListItems: null,
         activeLayer: null,
+        handler: null,
         _streetViewHandler : null, //listen for click of image
         streetViewHandler : null, //Listen for show of map infowindow
         constructor : function() {
@@ -55,76 +57,69 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                     $(li).tab();
                 }
                 domConstruct.place(li, tabContainer, "last");
-                
-                //TODO: Handle Click of tab
+
+                // Handle Click of tab
                 $(aTag).on('shown.bs.tab', lang.hitch(this, function (e) {
                     this.activeLayer = operationalLayer.layerObject;
+                    if (this.handler !== null) {
+                        this.handler.remove();
+                    }
+                    this.handler = on(this.activeLayer, "extent-change", lang.hitch(this, this.updateList));
                     array.forEach(this.operationalLayers, function (opLayer) {
-                        opLayer.layerObject.setVisibility(!opLayer.layerObject.visible);
-                    });                    
+                        if (opLayer.layerObject.visible === true) {
+                            opLayer.layerObject.setVisibility(false);
+                        } 
+                    });
+                    this.activeLayer.show();
+
+                    if (this.map.infoWindow.isShowing) {
+                        this.map.infoWindow.hide();
+                    }
                     this.updateList();
                 }));
                 //Add widgetNode property to operationalLayer
                 operationalLayer.widgetNode = li;
+
             }));
         },
         updateList: function () {
-            this.activeLayer.on("update-end", lang.hitch(this, function (event) {
-                var row = domConstruct.create("div", {
-                    "class": "row"
-                });
-                $(".thumbContainer").empty();
-                array.forEach(this.activeLayer.graphics, lang.hitch(this, function (graphic) {
-                    //Create thumbnails
-                    var col = domConstruct.create("div", {
-                        "class": "col-xs-12 col-lg-4 thumbnail"
-                    }, row, "last");
-                    var aTag = domConstruct.create("a", {
-                    }, col, "last");
-                    var img = domConstruct.create("img", {
-                        alt: graphic.attributes[config.shortlistDisplayField],
-                        src: graphic.attributes[config.imageField]
-                    }, aTag, "last");
-                    var label = domConstruct.create("label", {
-                        innerHTML: graphic.attributes[config.shortlistDisplayField],
-                        "style": "font-size:10px;"
-                    }, img, "after");
-                    //Col click
-                    on(col, "click", lang.partial(lang.hitch(this, "selectGraphic"), graphic));
-                }));
-                $(".thumbContainer").html(row);
+            var self = this;
+            this.handler = on(this.activeLayer, "update-end", lang.hitch(this, function () {                
+                var query = new Query();
+                query.geometry = this.map.extent;
+                query.outSpatialReference = this.map.spatialReference;
+                query.where = "1=1";
 
-                //Update streetViewhandler
-                if (this.streetViewHandler) {
-                    this.streetViewHandler.remove();
-                    this.streetViewHandler = null;
-                }
-                if (this._streetViewHandler) {
-                    this._streetViewHandler.remove();
-                    this._streetViewHandler = null;
-                }
-                if (this.activeLayer.name.toUpperCase().indexOf("FUTURE") >=0) {
-                    this.streetViewHandler == on(this.map.infoWindow, "show", lang.hitch(this, function () {
-                        var graphic = this.map.infoWindow.getSelectedFeature();
-                        var x = graphic.attributes.POINT_X;
-                        var y = graphic.attributes.POINT_Y;
-                        var gStreeUrl = "//maps.google.com/maps?q=" + y + ", " + x + "&z=17&t=k&hl=en";
-                        //this._streetViewHandler = on($(".esriPopupMediaImage"), "click", function () {
-                            //window.open(gStreeUrl);
-                        //});
-                    }));
-                }
-            }));            
+                this.activeLayer.queryFeatures(query, function (featureSet) {
+                    var row = domConstruct.create("div", {});
+                    $(".thumbContainer").empty();
+                    array.forEach(featureSet.features, function (graphic) {
+                        //Create thumbnails
+                        var col = domConstruct.create("div", {
+                            "class": "col-xs-12 col-lg-4 thumbnail"
+                        }, row, "last");
+                        var aTag = domConstruct.create("a", {
+                        }, col, "last");
+                        var img = domConstruct.create("img", {
+                            alt: graphic.attributes[config.shortlistDisplayField],
+                            src: graphic.attributes[config.imageField]
+                        }, aTag, "last");
+                        var label = domConstruct.create("label", {
+                            innerHTML: graphic.attributes[config.shortlistDisplayField],
+                            "style": "font-size:9px;"
+                        }, img, "after");
+                        //Col click
+                        on(col, "click", lang.partial(lang.hitch(self, "selectGraphic"), graphic));
+                    });
+                    $(".thumbContainer").html(row);
+                });
+            }));                  
         },
-        selectGraphic: function (graphic, evt) {
-            var title = graphic.attributes[config.shortlistDisplayField];
-            
-            //Open infowindow
-            this.map.infoWindow.setContent(graphic.getContent());
+        selectGraphic: function (graphic, evt) {            
+            this.map.infoWindow.setFeatures([graphic]);
             this.map.infoWindow.show(graphic.geometry);
             //Zoom to graphic
-            this.map.centerAndZoom(graphic.geometry, 15); // Will only work for points
+            this.map.centerAndZoom(graphic.geometry, 15); // Will only work for points*/
         }
-
     });// return
 }); //define

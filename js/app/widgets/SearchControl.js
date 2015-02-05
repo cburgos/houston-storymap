@@ -16,9 +16,10 @@
     "esri/tasks/locator",
     "esri/tasks/QueryTask",
     "esri/tasks/query",
-    "esri/symbols/SimpleFillSymbol"
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/PictureMarkerSymbol"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol, PictureMarkerSymbol) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -32,7 +33,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         cityCouncilDistricts: null,
         searchTypes: {
             "ADDRESS": "ADDRESS",
-            "PROJECT": "PROJECT",
+            "PROJECT_NAME": "PROJECT_NAME",
             "SUPER_NEIGHBORHOOD": "SUPER_NEIGHBORHOOD",
             "CITY_COUNCIL_DISTRICTS": "CITY_COUNCIL_DISTRICTS",
         },
@@ -142,7 +143,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
 
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._addressTypeAhead();
-            } else if (this.searchType === this.searchTypes.PROJECT) {
+            } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectTypeAhead();
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
                 this._cityCouncilDistrictsTypeAhead();
@@ -245,12 +246,13 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 var center;
                 if (feat.geometry.type === "polygon") {
                     if (showBoundary === true) {
-                        this.showBoundary(feat.geometry);
-                    }
-                    this.map.setExtent(feat.geometry.getExtent());
+                        console.log(feat.geometry);
+                        this.showBoundary(feat.geometry);                        
+                    }                    
+                    this.map.setExtent(feat.geometry.getExtent().expand(2));
                 } else if (feat.geometry.type === "point") {
                     center = feat.geometry;
-                    this._zoomToPoint(center);
+                    this._zoomToPoint(center);                    
                 }                
             }
         },
@@ -261,6 +263,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             } else {
                 this.map.centerAt(pt);
             }
+            
         },
         showBoundary: function(geometry) {
             if (geometry.type === "polygon") {
@@ -272,7 +275,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         search: function () {
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._findAddress(null, null, this.searchInput.value);
-            } else if (this.searchType === this.searchTypes.PROJECT) {
+            } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectSearch(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
                 this._cityCouncilDistrictSearch(null, null, this.searchInput.value);
@@ -284,8 +287,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         },
         _cityCouncilDistrictSearch: function (fn, val, text) {
             var qt = new QueryTask(config.cityCouncilDistrictsService);
-            var q = new Query();
-            q.where = "DISTRICT ='" + val + "'";
+            var q = new Query();           
+            q.where = "upper(DISTRICT) ='" + text.toUpperCase() + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
@@ -295,7 +298,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         _superNeighborhoodsSearch: function (fn, val, text) {
             var qt = new QueryTask(config.superNeighborhoodService);
             var q = new Query();
-            q.where = "SNBNAME ='" + val + "'";
+            q.where = "upper(SNBNAME) ='" + text.toUpperCase() + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
@@ -334,6 +337,11 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             if (!loc) { return; }
             var pt = new Point(loc.feature.geometry.x, loc.feature.geometry.y, new SpatialReference(result.spatialReference.latestWkid));
             this._zoomToPoint(pt);
+
+            //Marker
+            this.map.graphics.clear();
+            var g = new Graphic(pt, new PictureMarkerSymbol("http://static.arcgis.com/images/Symbols/Basic/RedStickpin.png", 24, 24), null, null);
+            this.map.graphics.add(g);
         }
     });// return
 }); //define

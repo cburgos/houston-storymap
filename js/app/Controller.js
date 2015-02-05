@@ -2,6 +2,7 @@
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/aspect",
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom",
@@ -12,23 +13,35 @@
     "application/widgets/LayerControl",
     "application/widgets/SearchControl",
     "application/config",
-    "esri/dijit/BasemapToggle",
+    "esri/dijit/BasemapGallery",
     "esri/geometry/Point",
     "esri/geometry/webMercatorUtils",
+    "esri/config",
     "esri/graphic",
+    "esri/InfoTemplate",
     "esri/layers/GraphicsLayer",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapToggle, Point, webMercatorUtils, Graphic, GraphicsLayer, PictureMarkerSymbol) {
+function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, BootstrapMap, Shortlist, LayerControl, SearchControl, config, BasemapGallery, Point, webMercatorUtils, esriConfig, Graphic, InfoTemplate, GraphicsLayer, ArcGISDynamicMapServiceLayer, PictureMarkerSymbol) {
     return declare(null, {
         map: null,
-        shortlist : null,
+        shortlist: null,
+        layerControl: null,
+        searchControl: null,
+        allConstructionLayer : null,
         startup: function () {
             this.init();
         },
         init: function () {
             //Init splash
             $("#splash").modal("show");
+
+            $('#LegendModal').modal({ "show": false, backdrop: false });
+            $("#LegendModal").draggable({ handle: ".modal-header" });
+
+            $('#basemapModal').modal({ "show": false, backdrop: false });
+            $("#basemapModal").draggable({ handle: ".modal-header" });
 
             $('#layerControlModal').modal({ "show" : false, backdrop : false });
             $("#layerControlModal").draggable({ handle: ".modal-header" });
@@ -44,8 +57,11 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.shortlist) {
                 this.shortlist.destroy();
             }
-            if (this.basemapToggle) {
-                this.basemapToggle.destroy();
+            if (this.basemapButton) {
+                domConstruct.destroy(this.basemapButton);
+            }
+            if (this.basemapGallery) {
+                this.basemapGallery.destroy();
             }
             if (this.locateBtn) {
                 domConstruct.destroy(this.locateBtn.id);
@@ -59,6 +75,9 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             if (this.toggleProjectsButton) {
                 domConstruct.destroy(this.toggleProjectsButton);
             }
+            if (this.allConstructionButton) {
+                domConstruct.destroy(this.allConstructionButton);
+            }
             if (this.infoButton) {
                 domConstruct.destroy(this.infoButton);
             }
@@ -70,7 +89,13 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             }
              if (this.layerControl) {
                 this.layerControl.destroy();
-            }
+             }
+             if (this.allConstructionLayer) {
+                 this.allConstructionLayer = null;
+             }
+             if (this.LegendControl) {
+                 this.LegendControl.destroy();
+             }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -80,27 +105,100 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
             var mapReq = BootstrapMap.createWebMap(selectedWebmap.webmapId, "mapDiv", {
                 mapOptions: {
                     slider: true,
-                    wrapAround180: false
+                    wrapAround180: true
                 }
             });
             mapReq.then(lang.hitch(this, function (result) {
                 if (result.map) {
                     this.map = result.map;
                     this.map.enableScrollWheelZoom();
+                    this.map.hideZoomSlider();
+
+                    //customize infowindow
+                    this.map.infoWindow.titleInBody = false;
+                    this.map.infoWindow.anchor = "left";
+
+                    aspect.before(this.map.infoWindow, "select", lang.hitch(this, function () {
+                        this.map.infoWindow.hide();
+                        array.forEach(this.map.infoWindow.features, function (g) {
+                            var infoTemplate = new InfoTemplate();
+                            var titleString = config.infoTemplateTitleField;
+                            var contentString = "";
+
+                            if (g.attributes.DEPARTMENT) {
+                                contentString = contentString + " Project Type : " + g.attributes.DEPARTMENT.replace("_", "");
+                            }
+                            if (g.attributes.CIP_NO) {
+                                contentString = contentString + " <br> WBS # : " + g.attributes.CIP_NO;
+                            }
+                            if (g.attributes.COST) {
+                                contentString = contentString + " <br> Cost Estimate : " + g.attributes.COST;
+                            }
+                            if (g.attributes.FCON_START) {
+                                contentString = contentString + " <br> Construction Start : " + g.attributes.FCON_START;
+                            }
+                            if (g.attributes.COMPLETED) {
+                                contentString = contentString + " <br> Construction End : " + g.attributes.COMPLETED;
+                            }
+                            if (g.attributes.PROJ_DOC) {
+                                contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
+                            }
+                            if (g.attributes.PROJ_DOC2) {
+                                contentString = contentString + "&nbsp;||&nbsp;<a target='_blank' href='" + g.attributes.PROJ_DOC2 + "'>Project Summary</a>";
+                            }
+                            //Street View Link
+                            if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
+                                var x = g.attributes.POINT_X;
+                                var y = g.attributes.POINT_Y;
+                                //var latLong = y + "," + x;                                
+                                //var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
+                                var gStreetUrl = "//pwecip.houstontx.gov/cipprod/StreetView.html?Y=" + y + "&X=" + x;
+                                contentString = contentString + " <br> <a href='" + gStreetUrl + "' target='_blank'>Street View</a>";
+                            }
+                            //Image
+                            if (g.attributes.PROJ_IMAGE) {
+                                contentString = contentString + " <br> <img class='esriPopupMediaImage' src='" + g.attributes.PROJ_IMAGE + "' />";
+                            }
+                            infoTemplate.setTitle(titleString);
+                            infoTemplate.setContent(contentString);
+
+                            g.setInfoTemplate(infoTemplate);
+                        });
+                        this.map.infoWindow.show(this.map.infoWindow.features[0]);
+                    }));
 
                     this._createShortlist(result);
 
-                    //slider titles
-                    $(".esriSimpleSliderIncrementButton").prop("title", "Zoom In");
-                    $(".esriSimpleSliderDecrementButton").prop("title", "Zoom Out");
+                    //Zoom In
+                    var zoomInBtn = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Zoom In"
+                    }, dom.byId("mapDiv_zoom_slider"), "after");
+                    var zoomInImg = domConstruct.create("span", {
+                        innerHTML : "+"
+                    }, zoomInBtn, "last");
+                    on(zoomInBtn, "click", lang.hitch(this, function () {
+                        this.map.setLevel(this.map.getLevel() + 1);
+                    }));
 
+                    //Zoom Out
+                    var zoomOutBtn = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Zoom Out"
+                    }, zoomInBtn, "after");
+                    var zoomOutImg = domConstruct.create("span", {
+                        innerHTML: "-"
+                    }, zoomOutBtn, "last");
+                    on(zoomOutBtn, "click", lang.hitch(this, function () {
+                        this.map.setLevel(this.map.getLevel() - 1);
+                    }));
                   
                     //Home Button
                     var homeExtent = result.map.extent;
                     var homeBtn = domConstruct.create("div", {
-                        "class": "homeButton",
+                        "class": "mapButton",
                         "title": "Default Extent"
-                    }, dom.byId("mapDiv_zoom_slider"), "after");
+                    }, zoomOutBtn, "after");
                     var homeImg = domConstruct.create("img", {
                         src: "images/ZoomHome.png"
                     }, homeBtn, "last");
@@ -112,7 +210,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     //Locate Button
                     var locateBtn = domConstruct.create("div", {
-                        "class": "locateButton",
+                        "class": "mapButton",
                         "title" : "My Location"
                     }, homeBtn, "after");
                     var locateImg = domConstruct.create("img", {
@@ -147,7 +245,7 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
 
                     //Data Layer Button
                     var dataLayerButton = domConstruct.create("div", {
-                        "class": "dataLayer",
+                        "class": "mapButton",
                         "title": "Data Layer"
                     }, locateBtn, "after");
                     domConstruct.create("span", {
@@ -162,13 +260,12 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     this.dataLayerButton = dataLayerButton;
 
                     //Toggle Projects button
-                    //Data Layer Button
                     var toggleProjectsButton = domConstruct.create("div", {
-                        "class": "toggleProjectsButton",
+                        "class": "mapButton",
                         "title": "Show / Hide Projects"
                     }, dataLayerButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-indent-right",
+                        "class": "glyphicon glyphicon-resize-horizontal",
                         "aria-hidden":true
                     }, toggleProjectsButton, "last");
 
@@ -199,14 +296,37 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }));
                     this.toggleProjectsButton = toggleProjectsButton;
 
-                    //InfoButton
-                    var infoButton = domConstruct.create("div", {
-                        "class": "infoButton",
-                        "title": "More Information"
+                    //all construction Button
+                    var allConstructionButton = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "All Construction: Look Back Look Forward"
                     }, toggleProjectsButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-question-sign",
+                        "class": "glyphicon glyphicon-fullscreen",
                         "aria-hidden": true
+                    }, allConstructionButton, "last");
+
+                    on(allConstructionButton, "click", lang.hitch(this, function (event) {
+                        //TODO: Toggle Layer
+                        if (this.allConstructionLayer) {
+                            this.allConstructionLayer.setVisibility(!this.allConstructionLayer.visible);
+                        } else {
+                            //create layer and add to map
+                            this.allConstructionLayer = new ArcGISDynamicMapServiceLayer(config.allConstructionLayer, {
+                            });
+                            this.map.addLayer(this.allConstructionLayer, 1);                            
+                        }
+                    }));
+                    this.allConstructionButton = allConstructionButton;
+
+                    //InfoButton
+                    var infoButton = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "More Information"
+                    }, allConstructionButton, "after");
+                    domConstruct.create("i", {
+                        "class": "fa fa-question",
+                        "style":"font-size:24px"
                     }, infoButton, "last");
 
                     on(infoButton, "click",  function (event) {
@@ -214,16 +334,28 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     });
                     this.infoButton = infoButton;
 
+                    //basemap toggle
+                    var basemapButton = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Toggle Basemaps"
+                    }, infoButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-th-large",
+                        "aria-hidden": true
+                    }, basemapButton, "last");
 
-                    //Basemap Toggle
-                    var basemapToggle = new BasemapToggle({
-                        theme: "basemapToggle",
-                        map: this.map,
-                        visible: true,
-                        basemap: "hybrid"
-                    }, domConstruct.create("div", {}, infoButton, "after"));
-                    basemapToggle.startup();
-                    this.basemapToggle = basemapToggle;
+                    on(basemapButton, "click", function (event) {
+                        $("#basemapModal").modal("toggle");
+                    });
+                    this.basemapButton = basemapButton;
+
+
+                    this.basemapGallery = new BasemapGallery({
+                        showArcGISBasemaps: true,
+                        map: this.map
+                    }, domConstruct.create("div", {}, dom.byId("basemapGallery"), "after"));
+
+                    this.basemapGallery.startup();
 
                     //Fix for basemaps so that togglebasemaps dijit will work
                     var basemapHash = {
@@ -245,12 +377,29 @@ function (declare, lang, array, domClass, domConstruct, dom, on, Map, BootstrapM
                     }));
                     this.map.setBasemap(basemapHash[basemapTitle]);
 
+                    //Legend Button
+                    var LegendButton = domConstruct.create("div", {
+                        "class": "mapButton",
+                        "title": "Legend"
+                    }, basemapButton, "after");
+                    domConstruct.create("span", {
+                        "class": "glyphicon glyphicon-list-alt",
+                        "aria-hidden": true
+                    }, LegendButton, "last");
+
+                    on(LegendButton, "click", lang.hitch(this, function (event) {
+                        $('#LegendModal').modal('toggle');                         
+                        //$("#LegendControl").load("Legend.html");
+                        //$("#LegendControl").height(400);
+                        //$("#LegendControl").scroll();
+                    }));
+                    this.LegendButton = LegendButton;
+
                     //Layer Control
                     this._initLayerControl(selectedWebmap);
                     
                     //Search Control
                     this.initSearchControl();
-
 
                 }
             }));

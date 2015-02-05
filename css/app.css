@@ -46,33 +46,16 @@ text-align:right;
 #SearchControl {
 position: absolute;
 z-index: 5;
-padding-left: 100px;
-padding-top: 15px;
-
+padding-left: 80px;
+padding-top: 10px;
+}
+#DivHeader
+{
+    border-width:1px;	
+    border-style:solid;
+    background-color: #F5F5F5;
 }
 
-.dataLayer {
-    position: relative;
-	left: 15px;
-    z-index:5;
-    width:32px;
-    height:32px;
-    background-color:white;
-    border:1px solid #CCC;
-    -webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-    text-align:center;
-    top:85px;
-    cursor:pointer;  
-}
-.dataLayer:hover {
-    background-color:#EEE;
-}
-.dataLayer span {
-    vertical-align:middle;  
-}
 .basemapBG {
     height:60px;
 }
@@ -96,12 +79,13 @@ padding-top: 15px;
 	z-index:5;
     cursor:pointer;  
 }
-.homeButton {
+
+.mapButton {
     position: relative;
 	left: 15px;
     z-index:5;
-    width:32px;
-    height:32px;
+    width:50px;
+    height:50px;
     background-color:white;
     border:1px solid #CCC;
     -webkit-border-radius: 5px;
@@ -109,73 +93,14 @@ padding-top: 15px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
     text-align:center;
-    top:85px;
-    cursor:pointer;  
+    top:10px;
+    cursor:pointer;
+    font-size:25px;  
 }
-.homeButton:hover {
+.mapButton:hover {
     background-color:#EEE;
 }
-.locateButton {
-    position: relative;
-	left: 15px;
-    z-index:5;
-    width:32px;
-    height:32px;
-    background-color:white;
-    border:1px solid #CCC;
-    -webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-    text-align:center;
-    top:85px;
-    cursor:pointer;  
-}
-.locateButton:hover {
-    background-color:#EEE;
-}
-.toggleProjectsButton {
-    position: relative;
-	left: 15px;
-    z-index:5;
-    width:32px;
-    height:32px;
-    background-color:white;
-    border:1px solid #CCC;
-    -webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-    text-align:center;
-    top:85px;
-    cursor:pointer;  
-}
-.toggleProjectsButton:hover {
-    background-color:#EEE;
-}
-.toggleProjectsButton span {
-    vertical-align:middle;  
-}
-.infoButton {
-    position: relative;
-	left: 15px;
-    z-index:5;
-    width:32px;
-    height:32px;
-    background-color:white;
-    border:1px solid #CCC;
-    -webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-    text-align:center;
-    top:85px;
-    cursor:pointer;  
-}
-.infoButton:hover {
-    background-color:#EEE;
-}
-.infoButton span {
+.mapButton span {
     vertical-align:middle;  
 }
 #splash {
@@ -188,4 +113,20 @@ padding-top: 15px;
     float:right;
     top:50px;
 
+}
+#basemapModal{
+    float:right;
+    top:50px;
+}
+.esriPopup.light .titleButton.close {
+right:0px;
+}
+.esriPopup .contentPane {
+
+    line-height: 2em;
+}
+.esriPopupMediaImage {
+    max-width: 200px;
+    max-height: 150px;
+    border-style: none;
 }

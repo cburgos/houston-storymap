@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>CIP Map Viewer</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Bootstrap -->
@@ -9,9 +9,11 @@
 
     <!-- Step 1. Add CSS for the mapping components -->
     <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.12/esri/css/esri.css">
-    <link rel="stylesheet" type="text/css" href="http://esri.github.io/bootstrap-map-js/src/css/bootstrapmap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrapmap.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">  
     <link rel="stylesheet" type="text/css" href="lib/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
     
     <!-- jQuery (for Bootstrap's JavaScript plugins) -->
     <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -20,6 +22,9 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="lib/js/bootstrap-typeahead.js"></script>   
 
+    <!-- jQuery (for Popup Video) -->
+    <script src="js/app/PopUp.js"></script>
+
     <!-- HTML5 IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
@@ -27,41 +32,18 @@
     <![endif]-->
 </head>
 <body>
-    <div class="page-header">
-        <div class="row">
-            <div class="headerText col-lg-8" >
-                <div class="col-lg-1">
-                    <img src="images/cityseal_trans_white_inside.png" alt="City of Houston" style="width:80px;height:87px;">
-                </div>                
-                <div class="col-lg-11">
-                    <h3 id="title">&nbsp;&nbsp;Draft 5-Year CIP (2015 - 2020)</h3>
-                    <small id="subtitle">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Public Works and Engineering</small>
-                </div>
-            </div>
-         
-              <div class="links col-lg-4" style="vertical-align:bottom;">
-                <br /><br />
-                <img id="logoImg" src="images/PWE_transparent70x49.png" style="width:70px;height:65px; vertical-align:middle;" alt="Public Works">
-            </div>
-        </div>       
-        <div class="row">
-            <div class=" col-lg-4">
-                <div id="projectToggle"class="btn-group" data-toggle="buttons"></div>
-            </div>
-            <div class="col-lg-4">
-            </div><!-- /.col-lg-2 -->
-            <div class="links col-lg-4">
-                <a id="A1" href="http://cohpwe.maps.arcgis.com/home/webmap/viewer.html?webmap=a5c7becef5324a6a934ddfd6c1812666" target="_blank">
-                    <img id="AllCIPs" src="images/all_activities.png"  alt="All Activities">
-                </a>
-            </div>
-        </div>
-    </div>
+     <div>
+        <img src="images/CIP_head_long.jpg" alt="City of Houston">
+     </div> 
+   
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 main-side-container">
                 <div class="panel panel-default">
                     <div class="panel-body">
+                        <div id="DivHeader" class="panel-title">
+                         <div id="projectToggle"class="btn-group" data-toggle="buttons"></div>
+                         </div>                       
                         <div id="shortlist"></div>
                     </div>
                 </div>                
@@ -73,35 +55,74 @@
 
                     <div id="layerControlModal" class="modal ">
                         <div class="modal-dialog">
-                            <div class="modal-content">
+                            <div class="modal-content" style="width:310px">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                     <h4 class="modal-title">Data Layers</h4>
                                 </div>
-                                <div class="modal-body embed-responsive-item">
+                                <div class="modal-body">
                                     <div id="layerControl"></div>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                     </div>
-
+                    <div id="basemapModal" class="modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="width:410px">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title">Select Basemap</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div style="height:310px; width:380px;">
+                                        <div id="basemapGallery"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- Legend -->
+                    <div id="LegendModal" class="modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="width:410px; height:400px;">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title">Legend</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div style="width:390px; height:310px; overflow-x: hidden; overflow-y: hidden"">
+                                        <div id="LegendControl">
+                                            <iframe src="//pwecip.houstontx.gov/cipprod/Legend.html" style="width:390px; height:310px; overflow-x: hidden; overflow-y: hidden"></iframe>
+                                        </div>
+                                    </div>                                                                      
+                                </div>                            
+                        </div>
+                    </div>
                 </div>
+                
                 <div id="splash" class="modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">ReBuilding Houston</h4>
+                                <h4 class="modal-title">ReBuild Houston</h4>
                             </div>
-                            <div class="modal-body embed-responsive-item">
+                            <div id="divWorst" class="modal-body embed-responsive-item">
                                 <iframe src="//player.vimeo.com/video/106973055" width="500" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                             </div>
+                            <div id="divDebt" class="modal-body embed-responsive-item">                                    
+                                 <iframe src="//player.vimeo.com/video/106973057" width="500" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                            </div>
+                            <div style="font-family:Verdana; font-size:smaller">
+                                 <a id="btnWorst" href="#" title="Click here to view Worst First Video">Worst First Video</a>&nbsp;||&nbsp;<a id="btnDebt" href="#" title="Click here to view Debt Free Video">Debt Free Video</a>
+                                </div>
                             <div class="modal-footer">
                                 <table style="width:100%">
                                          <tr style="font-family:Verdana; font-size:smaller">
-                                             <td colspan="6" style="text-align: left;">
-                                                 <h4>CIP Map Viewer: Draft 5-Year (2015 - 2020)</h4>
+                                             <td colspan="7" style="text-align: left;">
+                                                 <h4>CIP Map Viewer (Draft 2015 - 2020)</h4>
                                                  <p>
-                                                     CIP Project Map Viewer uses Geographic Information Systems (GIS) technology to display location and information for hundreds of CIP projects that have been recently completed, are under construction,  or planned for future construction over the next 5 years. The projects are divided into two categories: Street and Drainage and Water and Wastewater.
+                                                     CIP Project Map Viewer uses Geographic Information Systems (GIS) technology to display location and information for hundreds of CIP projects that have been recently completed, are under construction,  or planned for future construction over the next 5 years. The projects are divided into two categories: Street & Drainage and Water & Wastewater.
                                                  </p>
                                                  <p>
                                                      <b>Note:</b> This application was tested using IE 9, IE10, Firefox, Google Chrome and Samsung tablet
@@ -112,16 +133,17 @@
                                              </td>
                                          </tr>
                                           <tr>
-                                             <td colspan="6" style="text-align: left;">&nbsp;</td>
+                                             <td colspan="7" style="text-align: left;">&nbsp;</td>
                                           </tr>
                                          <tr style="font-family:Verdana; font-size:smaller">      
-                                             <td style="width:15%; text-align: left; color:#2A6496;">Other Links:  </td>                                   
-                                             <td style="width:8%; text-align: left;"><u><a id="A3" href="http://www.gims.houstontx.gov/" target="_blank">GIMS</a></u></td>
-                                             <td style="width:20%; text-align: left;"><u><a id="A2" href="http://www.rebuildhouston.org/" target="_blank">ReBuild Houston</a></u></td>
+                                             <td style="width:15%; text-align: left; color:#2A6496;">Other Links:&nbsp;</td>   
                                              <td style="width:20%; text-align: left;"><u><a id="A4" href="http://www.houstontx.gov/" target="_blank">City Of Houston</a></u></td> 
-                                             <td style="width:20%; text-align: left;"><u><a id="A5" href="http://pwegis.houstontx.gov/CIP/PDF/NOT_AVAILABLE.pdf" target="_blank">CIP Viewer Tutorial</a></u></td>                                            
-                                             <td style="width:17%; text-align: right; font-weight: bold;">
-                                                 <b><button type="button" data-dismiss="modal" aria-hidden="true" style="font:bold;">Close</button></b></td>
+                                             <td style="width:5%; text-align: left;"><u><a id="A1" href="http://hfdapp.houstontx.gov/311/index.php" target="_blank">311</a></u></td>
+                                             <td style="width:20%; text-align: left;"><u><a id="A2" href="http://www.rebuildhouston.org/" target="_blank">ReBuild Houston</a></u></td>
+                                             <td style="width:8%; text-align: left;"><u><a id="A3" href="http://www.gims.houstontx.gov/" target="_blank">GIMS</a></u></td>                                             
+                                             <td style="width:25%; text-align: left;"><u><a id="A5" href="http://pwegis.houstontx.gov/CIP_Project/PDF/CIPMapViewer_Tutorial.pdf" target="_blank">CIP Viewer Tutorial</a></u></td>                                            
+                                             <td style="width:7%; text-align: right; font-weight: bold;">
+                                                 <b><button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" style="font:bold;">Close</button></b></td>
                                          </tr>
                                      </table> 
                             </div>
