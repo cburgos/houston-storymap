@@ -155,29 +155,31 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             var self = this;
             $(this.searchInput).typeahead({
                 ajax: {
-                    url:"//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest",
+                    url: "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates",
                     method: "GET",
                     triggerLength: 1,
-                    displayField:"text",
+                    displayField:"address",
                     preDispatch: function (query) {
                         return {
-                            text: query,
+                            singleLine: query,
                             f: "json",
                             dataType: "json",
                             maxLocations: 6,
-                            Country:"USA"
+                            city: "Houston",
+                            region:"Texas",
+                            countryCode:"USA"
                         };                            
                     },
                     preProcess: function (data) {
-                        return data.suggestions;
+                        return data.candidates;
                     },
                     dataType: "json"
                 },
-                display: "text",
-                val: "magicKey",
+                display: "address",
+                val: "address",
                 items: 6,
-                itemSelected: function (fn, magicKey, text) {
-                    self._findAddress(fn, magicKey, text);
+                itemSelected: function (fn, val, text) {
+                    self._findAddress(fn, val, text);
                 }
             });
         },
@@ -316,12 +318,11 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 this._goToLocation(featureSet, false);
             }));
         },
-        _findAddress: function (fn, magicKey, text) {
+        _findAddress: function (fn, val, text) {
             $.get(
                    "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find",
                    {
                        text: text,
-                       //magicKey: magicKey,
                        outSR: this.map.spatialReference.wkid,
                        f: "json"
                    },
