@@ -102,9 +102,14 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         startup: function () {
 
             //init searchLayer
-            this.searchLayer = new GraphicsLayer();
-            this.map.addLayer(this.searchLayer, 1);
-
+            if (!this.map.getLayer("searchLayer")) {
+                this.searchLayer = new GraphicsLayer({
+                    id: "searchLayer"
+                });
+                this.map.addLayer(this.searchLayer, 1);
+            } else {
+                this.searchLayer = this.map.getLayer("searchLayer");
+            }
 
             //init dropdowns
             $('.dropdown-toggle').dropdown();
