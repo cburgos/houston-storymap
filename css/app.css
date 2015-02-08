@@ -52,29 +52,6 @@ padding-top: 10px;
 #projectToggle {
     text-align: center;
 }
-.basemapBG {
-    height:60px;
-}
-.basemapToggle{
-	position: relative;
-	left: 15px;
-	top: 85px;
-    width:85px;
-	text-align: center;
-	border: 1px solid #57585A;
-	background-color: #FFF;
-	color: #4C4C4C;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-	z-index:5;
-    cursor:pointer;  
-}
 
 .mapButton {
     position: relative;
