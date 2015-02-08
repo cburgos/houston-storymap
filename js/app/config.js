@@ -15,7 +15,7 @@
     webmaps : [
         {
             label: "&nbsp;&nbsp;&nbsp;Streets & Drainage&nbsp;&nbsp;&nbsp;", 
-            webmapId: "a44443cefef84817a83fb2b8b208cd77",
+            webmapId: "843689b716c34f518a406e756eff6e79",
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
@@ -61,7 +61,7 @@
         },
         {
             label: "&nbsp;&nbsp;&nbsp;Water & Wastewater&nbsp;&nbsp;&nbsp;",
-            webmapId: "42483ddf05bc43f28aee27b449da0a9b",
+            webmapId: "95b142271284450f9f3df465ce9341dd",
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
@@ -105,10 +105,9 @@
             checked : false
         },
         {
-            //label: "&nbsp;&nbsp;All&nbsp;&nbsp;",
-			//label: "<div style=width:32px>All</div>",
-			label: "All",
-            webmapId: "9e41c704aae1454c803a3ebf236f692f",
+
+            label: "&nbsp;All&nbsp;",
+            webmapId: "ff25bcf6f51c4428a43b26bab19c850e",
             referenceLayers: [
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
