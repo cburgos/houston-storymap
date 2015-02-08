@@ -323,7 +323,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             var url = window.app.shortlist.activeLayer.url + "/query";
             var qt = new QueryTask(url);
             var q = new Query();
-            q.where = config.shortlistDisplayField + "='" + val + "'";
+            q.where = config.shortlistDisplayField + "='" + text + "'";
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
