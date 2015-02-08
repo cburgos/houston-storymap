@@ -12,6 +12,7 @@
     "dojo/text!application/widgets/templates/SearchControl.html",
     "esri/geometry/Point",
     "esri/graphic",
+    "esri/layers/GraphicsLayer",
     "esri/SpatialReference",
     "esri/tasks/locator",
     "esri/tasks/QueryTask",
@@ -19,7 +20,7 @@
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/PictureMarkerSymbol"
 ],
-function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol, PictureMarkerSymbol) {
+function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Point, Graphic, GraphicsLayer, SpatialReference, Locator, QueryTask, Query, SimpleFillSymbol, PictureMarkerSymbol) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         layers: null,
@@ -39,6 +40,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         },
         searchType: "",
         searchButton: null,
+        searchLayer : null,
         constructor: function () {
             this.inherited(arguments);
             this.layers = [];
@@ -98,6 +100,12 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             });
         },
         startup: function () {
+
+            //init searchLayer
+            this.searchLayer = new GraphicsLayer();
+            this.map.addLayer(this.searchLayer, 1);
+
+
             //init dropdowns
             $('.dropdown-toggle').dropdown();
 
@@ -241,14 +249,13 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         },
         _goToLocation: function (featureSet, showBoundary) {
             //Clear any map graphics
-            this.map.graphics.clear();
+            this.searchLayer.clear();
 
             if (featureSet.features.length > 0) {
                 var feat = featureSet.features[0];
                 var center;
                 if (feat.geometry.type === "polygon") {
                     if (showBoundary === true) {
-                        console.log(feat.geometry);
                         this.showBoundary(feat.geometry);                        
                     }                    
                     this.map.setExtent(feat.geometry.getExtent().expand(2));
@@ -270,7 +277,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         showBoundary: function(geometry) {
             if (geometry.type === "polygon") {
                 var graphic = new Graphic(geometry, new SimpleFillSymbol(), null, null);
-                this.map.graphics.add(graphic);
+                this.searchLayer.add(graphic);
             }
             
         },
@@ -340,9 +347,9 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             this._zoomToPoint(pt);
 
             //Marker
-            this.map.graphics.clear();
+            this.searchLayer.clear();
             var g = new Graphic(pt, new PictureMarkerSymbol("http://static.arcgis.com/images/Symbols/Basic/RedStickpin.png", 24, 24), null, null);
-            this.map.graphics.add(g);
+            this.searchLayer.add(g);
         }
     });// return
 }); //define
