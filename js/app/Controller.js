@@ -100,6 +100,10 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
         _init: function (selectedWebmap) {
             this._cleanup();
 
+            //Update Project Category Button
+            //TODO : Better way to add span?
+            $("#projectTypeButton").html(selectedWebmap.label +"<span class='caret'></span>");
+
             //Init Map
             
             var mapReq = BootstrapMap.createWebMap(selectedWebmap.webmapId, "mapDiv", {
@@ -414,32 +418,31 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
             this.searchControl = searchControl;
         },
         initWebmapToggle: function () {
-            //Foreach webmap in config.webmaps create radio button and attach handler
-            var buttonGroupNode = dom.byId("projectToggle");
+            //Foreach webmap in config.webmaps create dropdown li and attach handler
+
+            var dropdownNode = dom.byId("projectToggle");
             var selectedBtn = null;
 
             array.forEach(config.webmaps, lang.hitch(this, function (webmap, i) {
                 
-                var label = domConstruct.create("label", {
-                    "class": "btn btn-primary",
-                    innerHTML: webmap.label
-                }, buttonGroupNode, "last");
+                var li = domConstruct.create("li", {
+                }, dropdownNode, "last");
 
-                var input = domConstruct.create("input", {
-                    "type": "radio",
-                    "name": "webmaps",
-                    "autocomplete": "off"
-                }, label, "first");
+                var aTag = domConstruct.create("a", {
+                    "href": "#",
+                    innerHTML : webmap.label
+                }, li, "first");
 
                 //Handle Toggle
-                on(label, "click", lang.hitch(this, lang.partial(this._init, config.webmaps[i])));
+                on(li, "click", lang.hitch(this, lang.partial(this._init, config.webmaps[i])));
                 if (webmap.checked === true) {
-                    selectedBtn = label;
+                    selectedBtn = li;
                 }
             }));
             if (selectedBtn !== null) {
                 selectedBtn.click();
             }
+
         },
         _createShortlist: function (obj) {
             var node = domConstruct.create("div", {}, dom.byId("shortlist"), "last");

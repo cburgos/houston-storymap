@@ -105,8 +105,7 @@
             checked : false
         },
         {
-            //label: "&nbsp;&nbsp;All&nbsp;&nbsp;",
-			//label: "<div style=width:32px>All</div>",
+
 			label: "All",
             webmapId: "9e41c704aae1454c803a3ebf236f692f",
             referenceLayers: [

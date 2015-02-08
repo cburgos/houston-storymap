@@ -35,9 +35,14 @@
             <div class="col-xs-4 main-side-container">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div id="DivHeader" class="panel-title">
-                         <div id="projectToggle"class="btn-group" data-toggle="buttons"></div>
-                         </div>                       
+                        <div class="btn-group">
+                            <button id="projectTypeButton" title="Select Project Type" class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                Project Type <span class="caret"></span>
+                            </button>
+                            <ul id="projectToggle" class="dropdown-menu" role="menu" >
+                            </ul>
+                        </div>
+                        <hr />                       
                         <div id="shortlist"></div>
                     </div>
                 </div>                

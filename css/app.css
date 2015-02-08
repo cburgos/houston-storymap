@@ -49,13 +49,9 @@ z-index: 5;
 padding-left: 80px;
 padding-top: 10px;
 }
-#DivHeader
-{
-    border-width:1px;	
-    border-style:solid;
-    background-color: #F5F5F5;
+#projectToggle {
+    text-align: center;
 }
-
 .basemapBG {
     height:60px;
 }
