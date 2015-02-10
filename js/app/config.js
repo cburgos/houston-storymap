@@ -10,8 +10,8 @@
     infoTemplateTitleField: "${PRO_SCOPE}",
     imageField: "PROJ_IMAGE",
     locatorUrl: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
-    cityCouncilDistrictsService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/3",
-    superNeighborhoodService: "http://www.gims.houstontx.gov/ArcGIS/rest/services/Reference/MapServer/2",
+    cityCouncilDistrictsService: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/2",
+    superNeighborhoodService: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
     webmaps : [
         {
             label: "&nbsp;&nbsp;&nbsp;Streets & Drainage&nbsp;&nbsp;&nbsp;", 
@@ -50,7 +50,7 @@
                 showInLayerControl: true
             },
             {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true
@@ -96,7 +96,7 @@
                 showInLayerControl: true
             },
             {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true
@@ -156,7 +156,7 @@
                 showInLayerControl: true
             },
             {
-                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/3",
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
                 label: "City Limit",
                 visible: false,
                 showInLayerControl: true

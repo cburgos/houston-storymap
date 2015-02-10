@@ -86,16 +86,13 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
             }
             if (this.searchControl) {
                 this.searchControl.destroy();
-            }
-             if (this.layerControl) {
-                this.layerControl.destroy();
-             }
-             if (this.allConstructionLayer) {
+            }             
+            if (this.allConstructionLayer) {
                  this.allConstructionLayer = null;
-             }
-             if (this.LegendControl) {
+            }
+            if (this.LegendControl) {
                  this.LegendControl.destroy();
-             }
+            }
         },
         _init: function (selectedWebmap) {
             this._cleanup();
@@ -121,7 +118,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                     //customize infowindow
                     this.map.infoWindow.titleInBody = false;
                     this.map.infoWindow.anchor = "left";
-
+					
                     aspect.before(this.map.infoWindow, "select", lang.hitch(this, function () {
                         this.map.infoWindow.hide();
                         array.forEach(this.map.infoWindow.features, function (g) {
@@ -147,18 +144,15 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             if (g.attributes.PROJ_DOC) {
                                 contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
                             }
-                            if (g.attributes.PROJ_DOC2) {
-                                contentString = contentString + "&nbsp;||&nbsp;<a target='_blank' href='" + g.attributes.PROJ_DOC2 + "'>Project Summary</a>";
-                            }
-                            //Street View Link
-                            if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
-                                var x = g.attributes.POINT_X;
-                                var y = g.attributes.POINT_Y;
-                                //var latLong = y + "," + x;                                
-                                //var gStreetUrl = "//maps.google.com/maps?q=" + latLong + "&z=17&t=k&hl=en";
-                                var gStreetUrl = "//pwecip.houstontx.gov/cipprod/StreetView.html?Y=" + y + "&X=" + x;
-                                contentString = contentString + " <br> <a href='" + gStreetUrl + "' target='_blank'>Street View</a>";
-                            }
+							
+							//Street View Link for all - C, FC, UC
+							var LatLong = esri.geometry.xyToLngLat(g.geometry.x, g.geometry.y);
+                            var x = LatLong[0];
+                            var y = LatLong[1];
+
+                            var gStreetUrl = "//pwecip.houstontx.gov/cipprod/StreetView.html?Y=" + y + "&X=" + x;
+                            contentString = contentString + " <br> <a href='" + gStreetUrl + "' target='_blank'>Street View</a>";
+                            
                             //Image
                             if (g.attributes.PROJ_IMAGE) {
                                 contentString = contentString + " <br> <img class='esriPopupMediaImage' src='" + g.attributes.PROJ_IMAGE + "' />";
@@ -250,7 +244,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                     //Data Layer Button
                     var dataLayerButton = domConstruct.create("div", {
                         "class": "mapButton",
-                        "title": "Data Layer"
+                        "title": "Reference Data Layers"
                     }, locateBtn, "after");
                     domConstruct.create("span", {
                         "class": "glyphicon glyphicon-list",
