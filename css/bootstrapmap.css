@@ -62,7 +62,7 @@
 
 /*** Restyle Esri Popup ***/
 .esriPopupWrapper {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: normal;
   line-height: 18px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -102,22 +102,22 @@
 /* Title Pane font and buttons */
 .esriPopup .titlePane, .esriPopup.light .titlePane, .esriPopup.dark .titlePane {
   height: 50px;
-  padding: 10px 0 0 10px;
-  background-color: #f7f7f7;
+  padding: 12px 0 0 10px;
+  background-color: #3385AA;
   font-size: 10px;
   font-weight:bold;
-  color: black;
+  color: white;
 }
 
 .esriPopup.light .titleButton {
   font-size: 16px;
-  color: black;
+  color: white;
   font-weight:600;
+  font-weight:bold;
 }
-
 .esriPopup.light .titleButton:hover {
-  color: black;   
-   font-weight:600;
+  color: white;   
+  font-weight:600;
 }
 .esriPopup.light .titleButton.next, .esriPopup.dark .titleButton.next {
   right: 40px;  
