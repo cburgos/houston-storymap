@@ -46,7 +46,8 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
             $('#layerControlModal').modal({ "show" : false, backdrop : false });
             $("#layerControlModal").draggable({ handle: ".modal-header" });
                        
-
+			$('#status').hide();
+			
             //Load webmap Toggle
             this.initWebmapToggle();
         },
@@ -135,6 +136,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             if (g.attributes.COST) {
                                 contentString = contentString + " <br> Cost Estimate : " + g.attributes.COST;
                             }
+							
                             if (g.attributes.FCON_START) {
                                 contentString = contentString + " <br> Construction Start : " + g.attributes.FCON_START;
                             }
@@ -144,6 +146,11 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             if (g.attributes.PROJ_DOC) {
                                 contentString = contentString + " <br> <a target='_blank' href='" + g.attributes.PROJ_DOC + "'>Project Details</a>";
                             }
+							/*
+							if (g._graphicsLayer.name.toUpperCase().indexOf('FUTURE') > -1) {
+								
+							}
+							*/
 							
 							//Street View Link for all - C, FC, UC
 							var LatLong = esri.geometry.xyToLngLat(g.geometry.x, g.geometry.y);
@@ -263,7 +270,7 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                         "title": "Show / Hide Projects"
                     }, dataLayerButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-resize-horizontal",
+                        "class": "glyphicon glyphicon-fullscreen",
                         "aria-hidden":true
                     }, toggleProjectsButton, "last");
 
@@ -300,11 +307,11 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                         "title": "All Construction: Look Back Look Forward"
                     }, toggleProjectsButton, "after");
                     domConstruct.create("span", {
-                        "class": "glyphicon glyphicon-fullscreen",
+                        "class": "glyphicon glyphicon-resize-horizontal",
                         "aria-hidden": true
                     }, allConstructionButton, "last");
 
-                    on(allConstructionButton, "click", lang.hitch(this, function (event) {
+                    on(allConstructionButton, "click", lang.hitch(this, function (event) {						
                         //TODO: Toggle Layer
                         if (this.allConstructionLayer) {
                             this.allConstructionLayer.setVisibility(!this.allConstructionLayer.visible);
@@ -312,7 +319,14 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
                             //create layer and add to map
                             this.allConstructionLayer = new ArcGISDynamicMapServiceLayer(config.allConstructionLayer, {
                             });
-                            this.map.addLayer(this.allConstructionLayer, 1);                            
+                            this.map.addLayer(this.allConstructionLayer, 1); 
+							//Loading Icon
+							dojo.connect(this.allConstructionLayer, "onUpdateStart", function () {
+                                esri.show(dojo.byId("status"));
+                            });
+                            dojo.connect(this.allConstructionLayer, "onUpdateEnd", function () {
+                                esri.hide(dojo.byId("status"));
+                            });
                         }
                     }));
                     this.allConstructionButton = allConstructionButton;
@@ -405,7 +419,8 @@ function (declare, lang, array, aspect, domClass, domConstruct, dom, on, Map, Bo
         initSearchControl : function() {
             var node = domConstruct.create("div", {}, dom.byId("SearchControl"), "last");
             var searchControl = new SearchControl({
-                map: this.map
+                map: this.map,
+				shortlist: this.shortlist
             }, node);
 
             searchControl.startup();

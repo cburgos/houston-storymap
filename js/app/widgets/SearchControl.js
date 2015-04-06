@@ -26,6 +26,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         layers: null,
         locator: null,
         map: null,
+		shortlist: null,
         searchDropdown: null,
         inputFocusHandler : null,
         searchInput : null,
@@ -34,6 +35,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         cityCouncilDistricts: null,
         searchTypes: {
             "ADDRESS": "ADDRESS",
+            "PROJECT_NO": "PROJECT_NO",
             "PROJECT_NAME": "PROJECT_NAME",
             "SUPER_NEIGHBORHOOD": "SUPER_NEIGHBORHOOD",
             "CITY_COUNCIL_DISTRICTS": "CITY_COUNCIL_DISTRICTS",
@@ -156,6 +158,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
 
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._addressTypeAhead();
+            } else if (this.searchType === this.searchTypes.PROJECT_NO) {
+                this._projectNoTypeAhead();
             } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectTypeAhead();
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
@@ -194,6 +198,43 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 itemSelected: function (fn, val, text) {
                     self._findAddress(fn, val, text);
                 }
+            });
+        },
+        _projectNoTypeAhead: function () {
+            var self = this;
+            var url = window.app.shortlist.activeLayer.url + "/query";
+            $(this.searchInput).typeahead({
+                ajax: {
+                    url: url,
+                    method: "GET",
+                    triggerLength: 1,
+                    displayField: "text",
+                    preDispatch: function (query) {
+                        var whereClause = "upper(" + config.ProjectNo + ") LIKE '%" + query.toUpperCase() + "%'";
+                        console.log("whereClause");
+                        return {
+                            "where": whereClause,
+                            "outFields": "*",
+                            f: "json"
+                        };
+                    },
+                    preProcess: function (data) {
+                        var suggestions = [];
+                        array.forEach(data.features, function (feat) {
+                            var suggestion = {
+                                text: feat.attributes[config.ProjectNo],
+                                val: feat.attributes[config.ProjectNo]
+                            };
+                            suggestions.push(suggestion);
+                        });
+                        return suggestions;
+                    },
+                    dataType: "json"
+                },
+                display: "text",
+                val: "val",
+                items: 6,
+                itemSelected: lang.hitch(self, self._projectNoSearch)
             });
         },
         _projectTypeAhead: function () {
@@ -252,7 +293,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 itemSelected: lang.hitch(self, self._superNeighborhoodsSearch)
             });
         },
-        _goToLocation: function (featureSet, showBoundary) {
+        _goToLocation: function (featureSet, showBoundary, showInfoWindow) {
             //Clear any map graphics
             this.searchLayer.clear();
 
@@ -267,7 +308,11 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
                 } else if (feat.geometry.type === "point") {
                     center = feat.geometry;
                     this._zoomToPoint(center);                    
-                }                
+                } 
+				if (showInfoWindow === true)
+                {
+                    this.shortlist.selectGraphic(feat);
+                }				
             }
         },
         _zoomToPoint: function (pt) {
@@ -289,6 +334,8 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
         search: function () {
             if (this.searchType === this.searchTypes.ADDRESS) {
                 this._findAddress(null, null, this.searchInput.value);
+            } else if (this.searchType === this.searchTypes.PROJECT_NO) {
+                this._projectNoSearch(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.PROJECT_NAME) {
                 this._projectSearch(null, null, this.searchInput.value);
             } else if (this.searchType === this.searchTypes.CITY_COUNCIL_DISTRICTS) {
@@ -306,7 +353,7 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
-                this._goToLocation(featureSet, true);
+                this._goToLocation(featureSet, true, false);
             }));
         },
         _superNeighborhoodsSearch: function (fn, val, text) {
@@ -316,7 +363,20 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
-                this._goToLocation(featureSet, true);           
+                this._goToLocation(featureSet, true, false);           
+            }));
+        },
+        _projectNoSearch: function (fn, val, text) {
+            var url = window.app.shortlist.activeLayer.url + "/query";
+            var qt = new QueryTask(url);
+            var q = new Query();
+            //q.where = config.shortlistDisplayField + "='" + text + "'";
+            q.where = "CIP_NO" + "='" + text + "'";
+			q.outFields = ["*"];
+            q.returnGeometry = true;
+            q.outSpatialReference = this.map.spatialReference;
+            qt.execute(q, lang.hitch(this, function (featureSet) {
+                this._goToLocation(featureSet, false, true);
             }));
         },
         _projectSearch: function (fn, val, text) {
@@ -324,10 +384,11 @@ function (config, declare, array, lang, domConstruct, domClass, on, _WidgetBase,
             var qt = new QueryTask(url);
             var q = new Query();
             q.where = config.shortlistDisplayField + "='" + text + "'";
+			q.outFields = ["*"];
             q.returnGeometry = true;
             q.outSpatialReference = this.map.spatialReference;
             qt.execute(q, lang.hitch(this, function (featureSet) {
-                this._goToLocation(featureSet, false);
+                this._goToLocation(featureSet, false, true);
             }));
         },
         _findAddress: function (fn, val, text) {

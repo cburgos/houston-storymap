@@ -6,6 +6,7 @@
     ],
     allConstructionLayer: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/CIPprojects/MapServer",
     pageTitle: "",
+    ProjectNo: "CIP_NO",
     shortlistDisplayField: "PRO_SCOPE",
     infoTemplateTitleField: "${PRO_SCOPE}",
     imageField: "PROJ_IMAGE",
@@ -14,9 +15,27 @@
     superNeighborhoodService: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DATA_LAYER_REF/MapServer/1",
     webmaps : [
         {
-            label: "&nbsp;&nbsp;&nbsp;Streets & Drainage&nbsp;&nbsp;&nbsp;", 
-            webmapId: "843689b716c34f518a406e756eff6e79",
+            label: "STREETS & DRAINAGE ", 
+            webmapId: "789810ac2998407d8cfc688173134200",
             referenceLayers: [
+			{
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/0",
+                label: "Storm Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/1",
+                label: "Local Street Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/2",
+                label: "Major Thoroughfare Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
                 label: "CIP Drainage Projects",
@@ -60,9 +79,27 @@
 
         },
         {
-            label: "&nbsp;&nbsp;&nbsp;Water & Wastewater&nbsp;&nbsp;&nbsp;",
-            webmapId: "95b142271284450f9f3df465ce9341dd",
+            label: "WATER & WASTEWATER ",
+            webmapId: "3e44f69d92fb439aab58a84055f5b10c",
             referenceLayers: [
+			{
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/0",
+                label: "Storm Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/1",
+                label: "Local Street Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/2",
+                label: "Major Thoroughfare Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
             {
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/WATER_REF/FeatureServer/0",
                 label: "CIP Water Projects",
@@ -106,10 +143,28 @@
         },
         {
 
-            label: "&nbsp;All&nbsp;",
-            webmapId: "ff25bcf6f51c4428a43b26bab19c850e",
-            referenceLayers: [
+            label: "ALL ",
+            webmapId: "0c93ab9fc4be41f8889d87f79699dde4",
+            referenceLayers: [            
             {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/0",
+                label: "Storm Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/1",
+                label: "Local Street Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+            {
+                url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD_RBH/REF_NEED/MapServer/2",
+                label: "Major Thoroughfare Need Areas",
+                visible: false,
+                showInLayerControl: true
+            },
+			{
                 url: "http://pwegis.houstontx.gov/arcgis/rest/services/PROD/DRAINAGE_REF/FeatureServer/0",
                 label: "CIP Drainage Projects",
                 minScale: 37000,

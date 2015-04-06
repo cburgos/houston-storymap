@@ -49,8 +49,18 @@ z-index: 5;
 padding-left: 80px;
 padding-top: 10px;
 }
+
 #projectToggle {
     text-align: center;
+}
+
+ #status {
+        background-color: #3071A9; 
+        color: white; 
+        padding: 5px; 
+        border: solid 5px white;
+        border-radius: 5px;
+		font-weight: bold;
 }
 
 .mapButton {
